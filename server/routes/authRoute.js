@@ -8,9 +8,9 @@ authRoute.post("/signin", signin);
 
 authRoute.post("/refresh",refresh);
 
-authRoute.get("/user",isSignedIn,(req,res)=>{
-    res.send(req.auth)
-});
+// authRoute.get("/user",isSignedIn,(req,res)=>{
+//     res.send(req.auth)
+// });
 
 authRoute.get("/signout", isSignedIn, signout);
 
