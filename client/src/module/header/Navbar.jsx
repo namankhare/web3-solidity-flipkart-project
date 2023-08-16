@@ -1,9 +1,14 @@
 import React from "react";
+import defaultImage from "/vite.svg";
+import userImage from "../../assets/img/user_pic.png";
 
 const Navbar = () => {
   return (
     <div>
-      <nav class="navbar navbar-light bg-dark">
+      <nav
+        class="navbar navbar-light bg-light"
+        style={{ background: "#E9AB43" }}
+      >
         <div class="container-fluid">
           <button
             class="navbar-toggler"
@@ -16,9 +21,19 @@ const Navbar = () => {
           >
             <span class="navbar-toggler-icon"></span>
           </button>
+          {/* <span class="navbar-text">
+            <img
+              src={userImage}
+              alt=""
+              srcSet=""
+              className="rounded-circle"
+              width="30"
+              height="30"
+            />
+          </span> */}
           <span class="navbar-text">
             <img
-              //   src={}
+              src={defaultImage}
               alt=""
               srcSet=""
               className="border border-dark rounded-circle"
