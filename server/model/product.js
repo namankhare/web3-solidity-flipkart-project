@@ -6,7 +6,23 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    currentPrice:{
+    seller:{
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+    productImage:{
+        type: String,
+        default: "../assets/images/itemNotFound.png"
+    },
+    MRP:{
+        type: Number,
+        required: true
+    },
+    discount:{
+        type: Number,
+        required: true
+    },
+    points:{
         type: Number,
         required: true
     },
@@ -15,7 +31,8 @@ const productSchema = new Schema({
         required: true
     },
     description:{
-        type: String
+        type: String,
+        required: true
     }
 }, {timestamps: true});
 

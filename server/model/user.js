@@ -22,19 +22,19 @@ const userSchema = new Schema({
     },
     address: {
         type: String,
-        // required: true
+        required: true
     },
     city: {
         type: String,
-        // required: true
+        required: true
     },
     pincode: {
         type: Number,
-        // required: true
+        required: true
     },
     state: {
         type: String,
-        // required: true,
+        required: true,
     },
     points:{
         type: Number,
@@ -53,7 +53,43 @@ const userSchema = new Schema({
             paymentMethod: String,
             dateOfOrder: Date
         }
-    ]]
+    ]],
+
+    SoldItemsHistory: [[
+        {
+            productId:{
+                type: Schema.Types.ObjectId,
+                ref: 'Product'
+            },
+            quantity: Number,
+            pointsDiscounted: Number,
+            price: Number,
+            paymentMethod: String,
+            dateOfOrder: Date
+        }
+    ]],
+
+    role:{
+        type: Number,
+        default: 0
+    },
+    referredTo:[{
+        userId:{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        pointsEarned: Number,
+        dateOfReferral: Date
+    }],
+    referredBy:[{
+        userId:{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        pointsEarned: Number,
+        dateOfReferral: Date
+    }]
+
 }, {timestamps: true});
 
 export default mongoose.model('User', userSchema);
