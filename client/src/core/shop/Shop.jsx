@@ -39,6 +39,22 @@ const ProductList = () => {
       discount: 25,
       imageUrl: "product4.jpg",
     },
+    {
+      id: 5,
+      name: "Product 5",
+      description: "Sweet,made with besan",
+      price: 400,
+      discount: 25,
+      imageUrl: "product5.jpg",
+    },
+    {
+      id: 6,
+      name: "Product 6",
+      description: "Sweet,made with besan",
+      price: 400,
+      discount: 25,
+      imageUrl: "product6.jpg",
+    },
     // ... more products
   ]);
   const [cart, setCart] = useState([]);
@@ -74,7 +90,11 @@ const ProductList = () => {
           {productsInRow.map((product) => (
             <div key={product.id} className="col-md-3">
               <div className="card mb-3">
-                <img src={laddoo} className="card-img-top" alt={product.name} />
+                <img
+                  src={laddoo}
+                  className="card-img-top "
+                  alt={product.name}
+                />
                 <div className="card-body">
                   <h5 className="card-title">{product.name}</h5>
                   <p className="card-text">
@@ -101,9 +121,9 @@ const ProductList = () => {
   return (
     <div>
       <Navbar />
-      <div className="container">
+      <div className="container mt-5 ">
         <div className="row mt-4">
-          <div className="col-lgg-12">
+          <div className="col-lg-12 col-md-12 col-12">
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -114,7 +134,7 @@ const ProductList = () => {
               />
               <div className="input-group-append">
                 <button
-                  className="btn btn-outline-secondary"
+                  className="btn btn-warning"
                   type="button"
                   onClick={handleSearch}
                 >
