@@ -48,7 +48,7 @@ const signin = async (req, res, next) => {
             }
             else{
 
-                const token = jwt.sign({_id: existingUser._id, email: existingUser.email}, process.env.JWT_SECRET, {expiresIn: "1min"});
+                const token = jwt.sign({_id: existingUser._id, email: existingUser.email}, process.env.JWT_SECRET, {expiresIn: "60s"});
                 res.cookie(existingUser._id, token, {
                     httpOnly: true,
                     expires: new Date(Date.now() + 60 * 1000),
@@ -120,7 +120,8 @@ const isSignedIn = expressjwt({
             return token;
         }
         else{
-            return null;
+
+             return null;
         }
     }
 })
