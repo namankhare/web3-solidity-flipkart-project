@@ -19,9 +19,9 @@ export const ViewProduct = ({ products, setProducts }) => {
       <h1>Create or View Products</h1>
       <div className="row g-3">
         {
-          products.map((product) => {
+          products.map((item) => {
             return (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard key={item._id} item={item} setProducts = {setProducts} products = {products} />
             )
           })
         }
