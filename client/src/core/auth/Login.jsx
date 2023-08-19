@@ -24,6 +24,7 @@ const Login = () => {
 
     return (
         <>
+            <div className="overall">
             <div class="form-container sign-in-form" id="vanish">
                 <div class="form-box sign-in-box">
                     <h2>Login</h2>
@@ -52,6 +53,7 @@ const Login = () => {
                     </div>
                     <img src={logIn} alt="" />
                 </div>
+            </div>
             </div>
 
         </>
