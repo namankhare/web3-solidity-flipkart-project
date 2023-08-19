@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
+import apiClient from "../../helper/apiClient";
 
 
 const Cart = () => {
@@ -47,16 +48,25 @@ const Cart = () => {
 
 
   // Calculate the total price and loyalty points
-  const { totalPrice, totalPoints } = cart.reduce(
+  // const { totalPrice, totalPoints } = cart.reduce(
+  //   (acc, product) => {
+  //     const productTotal = (product.MRP - product.discount) * product.quantity;
+  //     const earnedPoints = (productTotal / 100) * 2;
+  //     return {
+  //       totalPrice: acc.totalPrice + productTotal,
+  //       totalPoints: acc.totalPoints + earnedPoints, // Cap points at 50
+  //     };
+  //   },
+  //   { totalPrice: 0, totalPoints: 0 }
+  // );
+  const { totalPrice } = cart.reduce(
     (acc, product) => {
       const productTotal = (product.MRP - product.discount) * product.quantity;
-      const earnedPoints = (productTotal * product.points) / 100;
       return {
         totalPrice: acc.totalPrice + productTotal,
-        totalPoints: acc.totalPoints + earnedPoints, // Cap points at 50
       };
     },
-    { totalPrice: 0, totalPoints: 0 }
+    { totalPrice: 0 }
   );
 
   const handleClickOutside = (event) => {
@@ -64,6 +74,11 @@ const Cart = () => {
       setIsCartActive(false);
     }
   };
+
+  const handleBuyNow = () => {
+    apiClient.post(`/user/checkout`)
+  }
+
 
   return (
     <>
@@ -111,8 +126,8 @@ const Cart = () => {
               {/* Display the total */}
               <div className="p-3">
                 <strong>Total Price: ${totalPrice.toFixed(2)}</strong>
-                <p className="fst-italic">You will get <span className="fw-bold">{Math.min(totalPoints.toFixed(0), 50)}</span> Flipkart Loyalty points for this order</p>
-                <button className="btn btn-outline-success" onClick={() => { setIsCartActive(false) }}>
+                <p className="fst-italic">You will get <span className="fw-bold">{Math.min((Math.floor(totalPrice / 100) * 2).toFixed(0), 50)}</span> Flipkart Loyalty points for this order</p>
+                <button className="btn btn-outline-success" onClick={handleBuyNow}>
                   Buy Now
                 </button>
               </div>

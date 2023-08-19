@@ -12,7 +12,6 @@ const Product = () => {
       <Header />
       <Navbar />
       <AddProduct products={products} setProducts={setProducts} />
-      {/* <DeleteProduct/> */}
       <ViewProduct products={products} setProducts={setProducts} />
 
     </>

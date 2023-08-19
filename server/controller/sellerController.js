@@ -45,6 +45,16 @@ const getAllItems = async (req, res, next) => {
         res.status(500).json({ message: error.message });
     }
 }
+const getItem = async (req, res, next) => {
+    try {
+        const productId = req.params.id;
+        const product = await Product.find({ _id:productId });
+        return res.status(200).json({ product: product });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
 const updateItem = async (req, res, next) => {
     const productId = req.params.id;
@@ -88,7 +98,7 @@ const deleteItem = async (req, res, next) => {
     }
 
     try {
-        const product = await Product.findByIdAndDelete();
+        const product = await Product.findByIdAndDelete(productId);
 
         res.status(200).json({ message: "Item successfully deleted", product: product });
 
@@ -142,5 +152,5 @@ const afterPaymentSeller = async (req, res, next) => {
     }
 }
 
-export { launchProduct, getAllItems, updateItem, deleteItem, afterPaymentSeller };
+export { launchProduct, getAllItems,getItem, updateItem, deleteItem, afterPaymentSeller };
 

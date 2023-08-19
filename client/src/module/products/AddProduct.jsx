@@ -13,7 +13,7 @@ export const AddProduct = ({ products, setProducts }) => {
       </div>
       {
         isVisiblePop && (
-          <PopUp isVisiblePop={isVisiblePop} setVisiblePop={setVisiblePop} products={products} setProducts={setProducts} />
+          <PopUp isVisiblePop={isVisiblePop} setVisiblePop={setVisiblePop} products={products} setProducts={setProducts} type={"add"} />
         )
       }
     </>

@@ -6,6 +6,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   top: 0px;
+  left: 0px;
   background-color: #000000c4;
   display: flex;
   align-items: center;
@@ -33,7 +34,7 @@ const Close = styled.div`
   cursor: pointer;
 `;
 
-export const PopUp = ({ setVisiblePop, products, setProducts }) => {
+export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -63,33 +64,50 @@ export const PopUp = ({ setVisiblePop, products, setProducts }) => {
     }
     setVisiblePop(false);
   }
+  const addOrUpdate = async (e) => {
+    if (type === "add") { submitHandler(e) }
+    else {
+      e.preventDefault();
+      try {
+        const oldData = await apiClient.get(`/seller/getItem/${type}`)
+        console.log(oldData.data.product);
+        // const { data } = await apiClient.put(`${import.meta.env.VITE_BACKEND_URL}/seller/updateItem/${type}`)
+        // console.log(data.product);
+        // setProducts([...products, data.product])
+
+      } catch (error) {
+        console.log(error.response.data);
+      }
+      // setVisiblePop(false)
+    }
+  }
   return (
     <Container>
       <Wrapper>
-        <form onSubmit={submitHandler}>
+        <form onSubmit={addOrUpdate}>
           <div className="mb-1">
             <label className="form-label">Product Name</label>
-            <input type="text" className="form-control" required />
+            <input type="text" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product MRP</label>
-            <input type="number" className="form-control" required />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Discount provided</label>
-            <input type="number" className="form-control" required />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product SKU</label>
-            <input type="number" className="form-control" required />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">FLT discount</label>
-            <input type="number" className="form-control" required />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Description</label>
-            <input type="text" className="form-control" required />
+            <input type="text" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Image</label>
