@@ -3,7 +3,14 @@ import ProductCard from '../card/productCard'
 
 export const ViewProduct = () => {
   return (
-    <ProductCard/>
+    <div className="container " >
+      <div className="row " >
+        <ProductCard/>
+        
+        <ProductCard/>
+        
+      </div>
+    </div>
   )
 }
 

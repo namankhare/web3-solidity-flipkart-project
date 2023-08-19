@@ -2,6 +2,7 @@ import React from "react";
 import defaultImage from "/vite.svg";
 import userImage from "../../assets/img/user_pic.png";
 import "../../../src/style.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -11,7 +12,7 @@ const Navbar = () => {
         style={{ background: "#2874f0" }}
       >
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <Link className="navbar-brand" to={'/'}>
             <img
               src={defaultImage}
               alt=""
@@ -20,7 +21,7 @@ const Navbar = () => {
               className="d-inline-block align-text-top"
             />
             FlipShop
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
