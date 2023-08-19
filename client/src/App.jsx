@@ -10,6 +10,7 @@ import "./style.css";
 import { useCallback, useContext, useEffect } from "react";
 import { GlobalContext } from "./context/GlobalContext";
 import axios from "axios";
+import PageNotFound from "./core/page404/PageNotFound";
 
 function App() {
   const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
@@ -28,7 +29,6 @@ function App() {
         }
       );
       if (data.status === "success") {
-        console.log("sdfd")
         setIsLoggedIn(true);
         setAuthUser({
           userid: data.user._id,
@@ -67,6 +67,7 @@ function App() {
         <Route path="/product" element={<Product />} />
         <Route path="/orders" element={<Order />} />
         <Route path="/rewards" element={<Rewards />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
   );

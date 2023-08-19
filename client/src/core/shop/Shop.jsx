@@ -1,10 +1,11 @@
-import React, { startTransition, useContext, useEffect, useState, useTransition } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../../module/header/Navbar";
 import Footer from "../../module/footer/Footer";
 import laddoo from "../../assets/img/laddoo.jpg";
 import "../../assets/css/dashboard.css";
 import Header from "../../module/header/Header";
 import apiClient from "../../helper/apiClient";
+import { GlobalContext } from "../../context/GlobalContext";
 
 // build this first using demo JSON data
 const ProductList = () => {
@@ -61,17 +62,15 @@ const ProductList = () => {
   //   // ... more products
   // ]);
   const [products, setProducts] = useState([]);
-  const [searchProducts, setSearchProducts] = useTransition([])
-  const [cart, setCart] = useState([]);
+  const [searchProducts, setSearchProducts] = useState([])
+  const { cart, setCart } = useContext(GlobalContext);
 
 
   useEffect(() => {
     apiClient.get(`/user/viewProducts`)
       .then(({ data }) => {
         setProducts(data.data);
-        startTransition(() => {
-          setSearchProducts(data.data);
-        });
+        setSearchProducts(data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -88,6 +87,7 @@ const ProductList = () => {
   };
 
   const handleAddToCart = (productId) => {
+
     // Find the selected product
     const selectedProduct = products.find(
       (product) => product._id === productId
@@ -99,10 +99,13 @@ const ProductList = () => {
     }
 
     setCart([...cart, selectedProduct]);
+
   };
   const handleRemoveFromCart = (productId) => {
+
     const updatedCart = cart.filter((item) => item._id !== productId);
     setCart(updatedCart);
+
   };
 
   const RenderProducts = () => {

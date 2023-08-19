@@ -4,6 +4,7 @@ import logIn from "../../assets/img/sammy-29.png";
 import axios from "axios";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useContext } from "react";
+import toast from 'react-hot-toast';
 
 const Login = () => {
     const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
@@ -20,6 +21,7 @@ const Login = () => {
             withCredentials: true
         })
             .then(({ data }) => {
+                toast.success(data.message)
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("refreshtoken", data.refreshToken);
                 setIsLoggedIn(true);
@@ -31,9 +33,7 @@ const Login = () => {
                     email: data.user.email,
                     phone: data.user.phone,
                 })
-                // setTimeout(() => {
-                //     navigate('/')
-                // }, 2000);
+                navigate("/")
 
             })
             .catch((err) => console.log({ err }));
@@ -42,35 +42,35 @@ const Login = () => {
     return (
         <>
             <div className="overall">
-            <div class="form-container sign-in-form" id="vanish">
-                <div class="form-box sign-in-box">
-                    <h2>Login</h2>
-                    <form onSubmit={submitHandler}>
-                        <div class="field">
-                            <i class="fa-solid fa-at"></i>
-                            <input type="email" id="text1" name="email" placeholder="Email" required />
-                        </div>
-
-                        <div class="field">
-                            <i class="fa-solid fa-key"></i>
-                            <input class="pass-input" type="password" name="password" placeholder="Enter password" required />
-                            <div class="eye-btn" >
-                                <i class="fa-solid fa-eye-slash"></i>
+                <div className="form-container sign-in-form" id="vanish">
+                    <div className="form-box sign-in-box">
+                        <h2>Login</h2>
+                        <form onSubmit={submitHandler}>
+                            <div className="field">
+                                <i className="fa-solid fa-at"></i>
+                                <input type="email" id="text1" name="email" placeholder="Email" required />
                             </div>
-                        </div>
 
-                        <input type="submit" class="submit-btn" value="Login" />
-                    </form>
+                            <div className="field">
+                                <i className="fa-solid fa-key"></i>
+                                <input className="pass-input" type="password" name="password" placeholder="Enter password" required />
+                                <div className="eye-btn" >
+                                    <i className="fa-solid fa-eye-slash"></i>
+                                </div>
+                            </div>
 
-                </div>
-                <div class="imgBox sign-in-imgBox">
-                    <div class="sliding-link">
-                        <p>Don't have an account?</p>
-                        <span class="sign-up-btn" onClick={() => { navigate("/signup") }}>Sign up</span>
+                            <input type="submit" className="submit-btn" value="Login" />
+                        </form>
+
                     </div>
-                    <img src={logIn} alt="" />
+                    <div className="imgBox sign-in-imgBox">
+                        <div className="sliding-link">
+                            <p>Don&apos;t have an account?</p>
+                            <span className="sign-up-btn" onClick={() => { navigate("/signup") }}>Sign up</span>
+                        </div>
+                        <img src={logIn} alt="" />
+                    </div>
                 </div>
-            </div>
             </div>
 
         </>
