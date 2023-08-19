@@ -35,8 +35,15 @@ const Close = styled.div`
 `;
 
 export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type }) => {
-
-  let item = products.find((p) => {return p._id === type})
+  let item;
+  if(type !== "add")
+  {
+    item = products.find((p) => {
+    
+      return p._id === type
+    })
+  }
+  // console.log(item);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -72,18 +79,42 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
     else {
       e.preventDefault();
       try {
-        let rawData = {};
+
+        let formRawData = {
+          name: e.target[0].value,
+          MRP: e.target[1].value,
+          discount: e.target[2].value,
+          SKU: e.target[3].value,
+          points: e.target[4].value,
+          description: e.target[5].value,
+          // photo: e.target[6].files[0]
+        }
+        // console.log(e.target[6].files[0]);
+
+        if(e.target[6].files[0] !== undefined)
+        {
+          formRawData.photo = e.target[6].files[0]
+        }
+
+        const formData = new FormData()
         Object.keys(formRawData).forEach((key) => {
-          rawData[key] = formRawData[key]
+          formData.append(key, formRawData[key])
         })
-        // const data  = await apiClient.put(`/seller/updateItem/${type}`,rawData)
-        console.log(rawData);
-        // setProducts([...products, data.product])
+        
+        const {data}  = await apiClient.put(`/seller/updateItem/${type}`,formData,{
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        let filteredProducts = products.filter((p) => {
+          return p._id !== type
+        })
+        filteredProducts.push(data.product)
+        setProducts(filteredProducts)
+        // console.log(filteredProducts);
 
       } catch (error) {
         console.log(error.response.data);
       }
-      // setVisiblePop(false)
+      setVisiblePop(false)
     }
   }
   return (
@@ -92,27 +123,27 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
         <form onSubmit={addOrUpdate}>
           <div className="mb-1">
             <label className="form-label">Product Name</label>
-            <input type="text" className="form-control" value={item.name}/>
+            <input type="text" className="form-control" defaultValue={item?.name}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product MRP</label>
-            <input type="number" className="form-control"  value={item.MRP}/>
+            <input type="number" className="form-control"  defaultValue={item?.MRP}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Discount provided</label>
-            <input type="number" className="form-control"  value={item.discount}/>
+            <input type="number" className="form-control"  defaultValue={item?.discount}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product SKU</label>
-            <input type="number" className="form-control"  value={item.SKU}/>
+            <input type="number" className="form-control"  defaultValue={item?.SKU}/>
           </div>
           <div className="mb-1">
             <label className="form-label">FLT discount</label>
-            <input type="number" className="form-control"  value={item.points}/>
+            <input type="number" className="form-control"  defaultValue={item?.points}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product Description</label>
-            <input type="text" className="form-control" value={item.description} />
+            <input type="text" className="form-control" defaultValue={item?.description} />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Image</label>

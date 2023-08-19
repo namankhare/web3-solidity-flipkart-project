@@ -97,6 +97,7 @@ const checkout = async (req, res, next) => {
             // console.log(currentPrice, product.points);
             let coinsReq = 0
             if(usePoints === true) coinsReq = (product.points/100) * currentPrice * item.qnt;
+            console.log(coinsReq);
             let enough = false;
 
             if (userCurrentPoints >= coinsReq) {
