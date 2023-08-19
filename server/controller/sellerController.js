@@ -1,9 +1,11 @@
 import Product from "../model/product.js";
 import User from "../model/user.js";
+import {uniqueSuffix} from "../helper/multer.js"
 
 const launchProduct = async (req, res, next) => {
     const {name, MRP, discount, points, SKU, description} = req.body;
-
+    
+    
     if(!(name && MRP && discount && points && SKU && description)){
         res.status(400).json({message: "All fields are required"});
     }
@@ -15,7 +17,7 @@ const launchProduct = async (req, res, next) => {
         if(existingProduct.length > 0){
             return res.status(400).json({message: "Product already exists"});
         }
-
+        let photoName = uniqueSuffix + "/" + req.file.filename;
         const product = await Product.create({
             name,
             MRP,
@@ -23,7 +25,8 @@ const launchProduct = async (req, res, next) => {
             points,
             SKU,
             description,
-            seller: req.auth._id
+            seller: req.auth._id,
+            productImage: photoName
         });
 
         res.status(201).json({message: "Product launched successfully", product: product});

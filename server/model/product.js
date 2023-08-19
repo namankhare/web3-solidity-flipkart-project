@@ -12,7 +12,8 @@ const productSchema = new Schema({
     },
     productImage:{
         type: String,
-        default: "../assets/images/itemNotFound.png"
+        // default: "../assets/images/itemNotFound.png"
+        required: true
     },
     MRP:{
         type: Number,
