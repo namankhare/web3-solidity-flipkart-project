@@ -17,6 +17,13 @@ const previousOrdersData = [
     price: 19.99,
     deliveryDate: "2023-08-12",
   },
+  {
+    id: 3,
+    productName: "Product C",
+    imageSrc: "path-to-image-B.jpg",
+    price: 19.99,
+    deliveryDate: "2023-08-12",
+  },
 ];
 
 const OrderHistory = () => {

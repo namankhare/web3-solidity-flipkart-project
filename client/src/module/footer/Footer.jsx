@@ -2,6 +2,9 @@ import React from "react";
 import logo from "/vite.svg";
 
 const Footer = () => {
+  const paraSize = {
+    fontSize: "small",
+  };
   const social = {
     background: "#01b8e9",
     borderRadius: "50%",
@@ -16,14 +19,16 @@ const Footer = () => {
         <div className="container">
           <div className="row p-2">
             <div className="col-lg-3 col-sm-12 col-md-4 d-flex flex-column my-2 box">
-              <div className="my-4">
-                <img height={70} src={logo} alt="" />
+              <div className="my-2">
+                <a href="">
+                  <img height={40} src={logo} alt="" />
+                </a>
               </div>
-              <div className="my-2 text-white">
-                <h6>Copyright © FlipShop, 2023.</h6>
-                <h6>All Rights Reserved.</h6>
+              <div className="my-1 text-white">
+                <h6 style={paraSize}>Copyright © FlipShop, 2023.</h6>
+                <h6 style={paraSize}>All Rights Reserved.</h6>
               </div>
-              <div className="my-2 text-left d-flex align-items-center w-50 justify-content-between">
+              <div className="my-1 text-left d-flex align-items-center w-50 justify-content-between">
                 <a
                   className="d-flex justify-content-center align-items-center"
                   href="/"

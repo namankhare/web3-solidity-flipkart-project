@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react'
-import {Link} from 'react-router-dom'
-import laddoo from '../../assets/img/laddoo.jpg'
+/* eslint-disable react/prop-types */
+import { useContext } from 'react'
 import { GlobalContext } from '../../context/GlobalContext'
 import apiClient from '../../helper/apiClient'
 import { PopUp } from '../products/PopUp'

@@ -39,20 +39,20 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
     e.preventDefault();
     try {
       
-      const { data } = await apiClient.post(`${import.meta.env.VITE_BACKEND_URL}/seller/createProducts`, {
-        name: e.target[0].value,
-        MRP: e.target[1].value,
-        discount: e.target[2].value,
-        SKU: e.target[3].value,
-        points: e.target[4].value,
-        description: e.target[5].value,
+      const formData = new FormData()
+      Object.keys(formRawData).forEach((key) => {
+        formData.append(key, formRawData[key])
+      })
+
+      const { data } = await apiClient.post(`${import.meta.env.VITE_BACKEND_URL}/seller/createProducts`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       console.log(data.product);
       setProducts([...products, data.product])
 
 
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
     }
     setVisiblePop(false);
   }

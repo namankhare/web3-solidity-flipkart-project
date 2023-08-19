@@ -1,18 +1,15 @@
 import fs from 'fs'
 import multer from 'multer'
 
-
-
 const uniqueSuffix = new Date().getFullYear() + "/" + new Date().getMonth();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        console.log("sdf", file)
-        if (file.fieldname === "productImage") {
-            const path = `../assets/uploads/productImage/${uniqueSuffix}`
+        if (file.fieldname === "photo") {
+            const path = `./assets/uploads/products/${uniqueSuffix}`
             fs.mkdirSync(path, { recursive: true })
             cb(null, path)
-        } 
+        }
     },
     filename: function (req, file, cb) {
         const uniqueSuffixDate = Date.now()
@@ -22,4 +19,4 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-export {upload, uniqueSuffix}
+export { upload, uniqueSuffix }

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Navbar from "../../module/header/Navbar";
 import Footer from "../../module/footer/Footer";
-import laddoo from "../../assets/img/laddoo.jpg";
 import "../../assets/css/dashboard.css";
 import Header from "../../module/header/Header";
 import apiClient from "../../helper/apiClient";
@@ -118,7 +117,7 @@ const ProductList = () => {
             <div key={product._id} className="col-md-3">
               <div className="card mb-3">
                 <img
-                  src={product.productImage}
+                  src={`${import.meta.env.VITE_BACKEND_IMAGE_URL}/uploads/products/${product.productImage}`}
                   className="card-img-top "
                   alt={product.name}
                 />
