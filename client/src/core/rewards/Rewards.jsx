@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../../module/header/Navbar";
+import Footer from "../../module/footer/Footer";
 import "../../assets/css/dashboard.css";
 import rewardImage from "../../assets/img/rewards.png";
 
@@ -64,6 +65,7 @@ const Reward = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

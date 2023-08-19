@@ -10,3 +10,15 @@ h6 {
     font-family: 'Montserrat';
     font-weight: 500;
 }
+
+.hero-container {
+    /* background: #8E2DE2;   
+background: -webkit-linear-gradient(to right, #4A00E0, #8E2DE2);  
+background: linear-gradient(to right, #4A00E0, #8E2DE2);  */
+
+    background-color: #8EC5FC;
+    /* background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%); */
+
+    background-image: linear-gradient(62deg, #b1d8fa 0%, #f2f2db 0%, #edf7ff 100%);
+
+}
