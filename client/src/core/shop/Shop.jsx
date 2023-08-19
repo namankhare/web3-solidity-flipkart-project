@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useContext, useEffect, useState, useTransition } from "react";
 import Navbar from "../../module/header/Navbar";
 import Footer from "../../module/footer/Footer";
 import laddoo from "../../assets/img/laddoo.jpg";
@@ -61,7 +61,7 @@ const ProductList = () => {
   //   // ... more products
   // ]);
   const [products, setProducts] = useState([]);
-  const [searchProducts, setSearchProducts] = useState([]);
+  const [searchProducts, setSearchProducts] = useTransition([])
   const [cart, setCart] = useState([]);
 
 
@@ -69,7 +69,9 @@ const ProductList = () => {
     apiClient.get(`/user/viewProducts`)
       .then(({ data }) => {
         setProducts(data.data);
-        setSearchProducts(data.data);
+        startTransition(() => {
+          setSearchProducts(data.data);
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -166,6 +168,7 @@ const ProductList = () => {
                 placeholder="Search by product name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyUp={handleSearch}
               />
               <div className="input-group-append">
                 <button

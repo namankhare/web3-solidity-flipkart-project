@@ -8,11 +8,11 @@ import Header from "../../module/header/Header";
 const Product = () => {
   return (
     <>
-    <Header/>
-      <Navbar/>
-      <AddProduct/>
+      <Header />
+      <Navbar />
+      <AddProduct />
       {/* <DeleteProduct/> */}
-      <ViewProduct/>
+      <ViewProduct />
     </>
   );
 };
