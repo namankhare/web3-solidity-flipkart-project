@@ -189,7 +189,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item px-3">
                 <a className="nav-link " aria-current="page" href="#">
-                  Become A Sellar
+                  Become A Seller
                 </a>
               </li>
               <li className="nav-item px-3">
