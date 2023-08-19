@@ -11,7 +11,7 @@ const Product = () => {
     <Header/>
       <Navbar/>
       <AddProduct/>
-      <DeleteProduct/>
+      {/* <DeleteProduct/> */}
       <ViewProduct/>
     </>
   );

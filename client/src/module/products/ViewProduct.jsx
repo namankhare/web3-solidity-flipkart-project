@@ -1,8 +1,9 @@
 import React from 'react'
+import ProductCard from '../card/productCard'
 
 export const ViewProduct = () => {
   return (
-    <div>ViewProduct</div>
+    <ProductCard/>
   )
 }
 
