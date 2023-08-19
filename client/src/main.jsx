@@ -12,7 +12,7 @@ import ContextProvider from "./context/GlobalContext.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ContextProvider>
     <Router>
-      <Web3 />
+      {/* <Web3 /> */}
       <App />
     </Router>
   </ContextProvider>
