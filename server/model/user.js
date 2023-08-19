@@ -3,20 +3,23 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    username:{
+    username: {
         type: String,
         required: true
     },
-    email : {
+    email: {
         type: String,
         unique: true,
         required: true
     },
-    name:{
+    userWallet: {
+        type: String
+    },
+    name: {
         type: String,
         required: true
     },
-    password:{
+    password: {
         type: String,
         required: true
     },
@@ -36,13 +39,13 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    points:{
+    points: {
         type: Number,
         default: 0
     },
     OrderHistory: [[
         {
-            productId:{
+            productId: {
                 type: Schema.Types.ObjectId,
                 ref: 'Product'
             },
@@ -57,7 +60,7 @@ const userSchema = new Schema({
 
     SoldItemsHistory: [[
         {
-            productId:{
+            productId: {
                 type: Schema.Types.ObjectId,
                 ref: 'Product'
             },
@@ -69,20 +72,20 @@ const userSchema = new Schema({
         }
     ]],
 
-    role:{
+    role: {
         type: Number,
         default: 0
     },
-    referredTo:[{
-        userId:{
+    referredTo: [{
+        userId: {
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
         pointsEarned: Number,
         dateOfReferral: Date
     }],
-    referredBy:[{
-        userId:{
+    referredBy: [{
+        userId: {
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
@@ -90,6 +93,6 @@ const userSchema = new Schema({
         dateOfReferral: Date
     }]
 
-}, {timestamps: true});
+}, { timestamps: true });
 
 export default mongoose.model('User', userSchema);
