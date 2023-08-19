@@ -25,6 +25,7 @@ const ContextProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(userDetail);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cart, setCart] = useState([]);
+  const [isCartActive, setIsCartActive] = useState(false);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
 
@@ -39,7 +40,9 @@ const ContextProvider = ({ children }) => {
       isWalletConnected,
       setIsWalletConnected,
       walletAddress,
-      setWalletAddress
+      setWalletAddress,
+      isCartActive,
+      setIsCartActive
     }}>
       {children}
     </GlobalContext.Provider>

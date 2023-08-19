@@ -4,13 +4,15 @@ import App from "./App.jsx";
 import "./style.css";
 import ContextProvider from "./context/GlobalContext.jsx";
 import { Toaster } from 'react-hot-toast';
+import Cart from "./module/cart/Cart.jsx";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ContextProvider>
     <Router>
-      <App />
+      <Cart />
       <Toaster />
+      <App />
     </Router>
   </ContextProvider>
 );

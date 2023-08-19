@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const Navbar = () => {
-  const { isLoggedIn, authUser, setAuthUser, setIsLoggedIn, isWalletConnected, walletAddress, setWalletAddress, setIsWalletConnected } = useContext(GlobalContext);
+  const { isLoggedIn, authUser, setAuthUser, setIsLoggedIn, isWalletConnected, walletAddress, setWalletAddress, setIsWalletConnected, setIsCartActive, isCartActive } = useContext(GlobalContext);
   const signOut = () => {
     apiClient.get(`/auth/signout`)
       .then(({ data }) => {
@@ -194,7 +194,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="nav-item px-3">
-                <a className="nav-link" href="#">
+                <a className="btn nav-link" onClick={() => { setIsCartActive(!isCartActive) }}>
                   Cart
                 </a>
               </li>

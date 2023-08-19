@@ -1,9 +1,7 @@
-import React from "react";
 import Header from "../module/header/Header";
 import profileImage from "../assets/img/user_pic.png";
 import OrderHistory from "../module/orders/OrderHistory";
 import "../assets/css/dashboard.css";
-
 import Footer from "../module/footer/Footer";
 
 const Base = () => {
