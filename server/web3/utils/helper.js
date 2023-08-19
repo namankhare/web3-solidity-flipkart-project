@@ -14,16 +14,18 @@ const fixExpiredToken = async (walletAddress) => {
                 .call();
 
             const currentTimestamp = Math.floor(Date.now() / 1000);
-            if (entry.expireTimestamp > 0 && entry.expireTimestamp <= currentTimestamp && entry.action === "earn") {
-                // Expire the points
-                try {
-                    const result = await loyaltyProgramContract.methods
-                        .expirePoints(i)
-                        .send({ from: walletAddress, gas: 500000 });
+            if (!entry.expired) {
+                if (entry.expireTimestamp > 0 && entry.expireTimestamp <= currentTimestamp && entry.action === "earn") {
+                    // Expire the points
+                    try {
+                        const result = await loyaltyProgramContract.methods
+                            .expirePoints(i)
+                            .send({ from: walletAddress, gas: 500000 });
 
-                    // console.log(`Expired points for entry ${i}, Transaction Hash:`, result.transactionHash);
-                } catch (error) {
+                        // console.log(`Expired points for entry ${i}, Transaction Hash:`, result.transactionHash);
+                    } catch (error) {
 
+                    }
                 }
             }
         }
@@ -118,5 +120,8 @@ const convertToWei = (amount) => {
 const convertFromWei = (amount) => {
     return web3.utils.fromWei(amount, "ether");
 }
+const timestamptoDate = (timestamp) => {
+    return new Date(parseInt(timestamp) * 1000);
+}
 
-export { totalUserPoints, mintAndEarnPoints, fixExpiredToken, redeemUserPoints, getUserPointsHistory }
+export { totalUserPoints, mintAndEarnPoints, fixExpiredToken, redeemUserPoints, getUserPointsHistory, timestamptoDate }
