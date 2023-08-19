@@ -1,4 +1,4 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
 import styled from "styled-components";
 import apiClient from '../../helper/apiClient';
 
@@ -33,66 +33,68 @@ const Close = styled.div`
   cursor: pointer;
 `;
 
-export const PopUp = ({isVisiblePop,setVisiblePop}) => {
-    const submitHandler = async (e) =>{
-        e.preventDefault();
-        try {
-          const res = await apiClient.post(`${import.meta.env.VITE_BACKEND_URL}/seller/createProducts`,{
-            name: e.target[0].value,
-            MRP: e.target[1].value,
-            discount: e.target[2].value,
-            SKU: e.target[3].value,
-            points: e.target[4].value,
-            description: e.target[5].value,
-        })
-        
-        console.log(res.data);  
-        } catch (error) {
-          console.log(error.response.data);
-        }
-        setVisiblePop(false);  
+export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts }) => {
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await apiClient.post(`${import.meta.env.VITE_BACKEND_URL}/seller/createProducts`, {
+        name: e.target[0].value,
+        MRP: e.target[1].value,
+        discount: e.target[2].value,
+        SKU: e.target[3].value,
+        points: e.target[4].value,
+        description: e.target[5].value,
+      })
+      console.log(data.product);
+      setProducts([...products, data.product])
+
+
+    } catch (error) {
+      console.log(error.response.data);
     }
+    setVisiblePop(false);
+  }
   return (
     <Container>
       <Wrapper>
         <form onSubmit={submitHandler}>
-            <div className="mb-1">
-                <label className="form-label">Product Name</label>
-                <input type="text" className="form-control" required/>
-            </div>
-            <div className="mb-1">
-                <label className="form-label">Product MRP</label>
-                <input type="number" className="form-control" required/>
-            </div>
-            <div className="mb-1">
-                <label className="form-label">Discount provided</label>
-                <input type="number" className="form-control" required/>
-            </div>
-            <div className="mb-1">
-                <label className="form-label">Product SKU</label>
-                <input type="number" className="form-control" required/>
-            </div>
-            <div className="mb-1">
-                <label className="form-label">FLT discount</label>
-                <input type="number" className="form-control" required/>
-            </div>
-            <div className="mb-1">
-                <label className="form-label">Product Description</label>
-                <input type="text" className="form-control" required/>
-            </div>
-            <div className="mb-1">
-                <label className="form-label">Product Image</label>
-                <input type="file" accept="image/*" className="form-control"/>
-            </div>
-            
-            <button type="submit" className="btn btn-primary mt-2">Submit</button>
+          <div className="mb-1">
+            <label className="form-label">Product Name</label>
+            <input type="text" className="form-control" required />
+          </div>
+          <div className="mb-1">
+            <label className="form-label">Product MRP</label>
+            <input type="number" className="form-control" required />
+          </div>
+          <div className="mb-1">
+            <label className="form-label">Discount provided</label>
+            <input type="number" className="form-control" required />
+          </div>
+          <div className="mb-1">
+            <label className="form-label">Product SKU</label>
+            <input type="number" className="form-control" required />
+          </div>
+          <div className="mb-1">
+            <label className="form-label">FLT discount</label>
+            <input type="number" className="form-control" required />
+          </div>
+          <div className="mb-1">
+            <label className="form-label">Product Description</label>
+            <input type="text" className="form-control" required />
+          </div>
+          <div className="mb-1">
+            <label className="form-label">Product Image</label>
+            <input type="file" accept="image/*" className="form-control" />
+          </div>
+
+          <button type="submit" className="btn btn-primary mt-2">Submit</button>
         </form>
-        <Close onClick={()=>{setVisiblePop(false)}}>
-            X
+        <Close onClick={() => { setVisiblePop(false) }}>
+          X
         </Close>
       </Wrapper>
     </Container>
-         
-    
+
+
   )
 }

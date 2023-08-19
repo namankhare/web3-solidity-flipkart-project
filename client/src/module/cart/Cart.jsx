@@ -59,12 +59,17 @@ const Cart = () => {
     { totalPrice: 0, totalPoints: 0 }
   );
 
+  const handleClickOutside = (event) => {
+    if (isCartActive && event.target.classList.contains("cart-backdrop")) {
+      setIsCartActive(false);
+    }
+  };
 
   return (
     <>
       {
         (isCartActive) ?
-          <div style={backdropStyle}>
+          <div style={backdropStyle} className="cart-backdrop" onClick={handleClickOutside}>
             <div style={cartStyle}>
               <div className="d-flex justify-content-between align-items-center p-3">
                 <h2>Cart</h2>
