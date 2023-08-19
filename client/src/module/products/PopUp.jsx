@@ -41,7 +41,15 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      
+      let formRawData = {
+        name: e.target[0].value,
+        MRP: e.target[1].value,
+        discount: e.target[2].value,
+        SKU: e.target[3].value,
+        points: e.target[4].value,
+        description: e.target[5].value,
+        photo: e.target[6].files[0]
+      }
       const formData = new FormData()
       Object.keys(formRawData).forEach((key) => {
         formData.append(key, formRawData[key])
@@ -60,10 +68,8 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
     setVisiblePop(false);
   }
   const addOrUpdate = async (e) => {
-    if(type === "add") 
-    {submitHandler(e)}
-    else
-    {
+    if (type === "add") { submitHandler(e) }
+    else {
       e.preventDefault();
       try {
         let rawData = {};

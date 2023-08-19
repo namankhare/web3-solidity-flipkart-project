@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
+import apiClient from "../../helper/apiClient";
 
 
 const Cart = () => {
@@ -74,6 +75,10 @@ const Cart = () => {
     }
   };
 
+  const handleBuyNow = () => {
+    apiClient.post(`/user/checkout`)
+  }
+
 
   return (
     <>
@@ -122,7 +127,7 @@ const Cart = () => {
               <div className="p-3">
                 <strong>Total Price: ${totalPrice.toFixed(2)}</strong>
                 <p className="fst-italic">You will get <span className="fw-bold">{Math.min((Math.floor(totalPrice / 100) * 2).toFixed(0), 50)}</span> Flipkart Loyalty points for this order</p>
-                <button className="btn btn-outline-success" onClick={() => { setIsCartActive(false) }}>
+                <button className="btn btn-outline-success" onClick={handleBuyNow}>
                   Buy Now
                 </button>
               </div>
