@@ -7,9 +7,52 @@ import Product from "./core/seller/Product";
 import Order from "./core/orders/Order";
 import Rewards from "./core/rewards/Rewards";
 import "./style.css";
+import { useCallback, useContext, useEffect } from "react";
+import { GlobalContext } from "./context/GlobalContext";
+import axios from "axios";
 
 function App() {
-  console.log(import.meta.env.VITE_BACKEND_URL)
+  const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
+
+  const refreshAuthState = useCallback(async () => {
+    let getRefreshToken = localStorage.getItem("refreshtoken");
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/auth/refresh`, { refreshToken: getRefreshToken },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    if (data.status === "success") {
+      setIsLoggedIn(true);
+      setAuthUser({
+        userid: data.user.id,
+        username: data.user.username,
+        name: data.user.name,
+        role: data.user.role,
+        email: data.user.email,
+        phone: data.user.phone,
+      })
+    } else {
+      setIsLoggedIn(false);
+      setAuthUser({
+        userid: '',
+        username: '',
+        name: '',
+        role: '',
+        email: '',
+        phone: 0
+      })
+
+    }
+  }, [setAuthUser, setIsLoggedIn])
+
+  useEffect(() => {
+    refreshAuthState();
+  }, [refreshAuthState])
   return (
     <>
 
