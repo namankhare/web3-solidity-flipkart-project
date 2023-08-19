@@ -125,7 +125,7 @@ const refreshAuthState = async (req, res, next) => {
     let token = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME || "60s" });
     res.cookie("token", token, { expire: new Date() + 9999, httpOnly: true, sameSite: "None", secure: true })
     let newRefreshToken = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
-    return res.json({ token: token, refreshToken: newRefreshToken, status: true, user: existingUser })
+    return res.json({ token: token, refreshToken: newRefreshToken, status: "success", user: existingUser })
 }
 
 const isSignedIn = expressjwt({

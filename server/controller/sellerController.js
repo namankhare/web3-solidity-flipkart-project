@@ -7,7 +7,7 @@ const launchProduct = async (req, res, next) => {
     
     
     if(!(name && MRP && discount && points && SKU && description)){
-        res.status(400).json({message: "All fields are required"});
+        return res.status(400).json({message: "All fields are required"});
     }
 
     try {
@@ -17,7 +17,7 @@ const launchProduct = async (req, res, next) => {
         if(existingProduct.length > 0){
             return res.status(400).json({message: "Product already exists"});
         }
-        let photoName = uniqueSuffix + "/" + req.file.filename;
+        // let photoName = uniqueSuffix + "/" + req.file.filename;
         const product = await Product.create({
             name,
             MRP,
@@ -26,7 +26,7 @@ const launchProduct = async (req, res, next) => {
             SKU,
             description,
             seller: req.auth._id,
-            productImage: photoName
+            // productImage: photoName
         });
 
         res.status(201).json({message: "Product launched successfully", product: product});

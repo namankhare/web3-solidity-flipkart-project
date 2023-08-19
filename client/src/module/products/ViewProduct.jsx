@@ -15,12 +15,12 @@ export const ViewProduct = () => {
   },[])
 
   return (
-    <div className="container " >
-      <div className="row " >
+    <div className="container" >
+      <div className="row g-3">
         {
           products.map((product) => {
             return(
-              <ProductCard key={product.id} product={product}/>
+              <ProductCard key={product._id} product={product}/>
             )
           })
         }
