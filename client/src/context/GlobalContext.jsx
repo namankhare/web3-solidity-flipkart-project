@@ -24,13 +24,17 @@ export const GlobalContext = createContext(null);
 const ContextProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(userDetail);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [cart, setCart] = useState([]);
+
 
   return (
     <GlobalContext.Provider value={{
       authUser,
       setAuthUser,
       isLoggedIn,
-      setIsLoggedIn
+      setIsLoggedIn,
+      cart,
+      setCart
     }}>
       {children}
     </GlobalContext.Provider>

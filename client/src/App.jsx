@@ -28,7 +28,6 @@ function App() {
         }
       );
       if (data.status === "success") {
-        console.log("sdfd")
         setIsLoggedIn(true);
         setAuthUser({
           userid: data.user._id,
