@@ -62,6 +62,7 @@ const Navbar = () => {
       }
     };
     checkConnection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
   const connectToMetamask = async () => {
     try {
