@@ -97,7 +97,7 @@ const ProductList = () => {
     if (cart.some((item) => item._id === selectedProduct._id)) {
       return; // Product is already in the cart
     }
-
+    selectedProduct.quantity = 1
     setCart([...cart, selectedProduct]);
 
   };
