@@ -16,37 +16,40 @@ function App() {
 
   const refreshAuthState = useCallback(async () => {
     let getRefreshToken = localStorage.getItem("refreshtoken");
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/auth/refresh`, { refreshToken: getRefreshToken },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    );
-    if (data.status === "success") {
-      setIsLoggedIn(true);
-      setAuthUser({
-        userid: data.user.id,
-        username: data.user.username,
-        name: data.user.name,
-        role: data.user.role,
-        email: data.user.email,
-        phone: data.user.phone,
-      })
-    } else {
-      setIsLoggedIn(false);
-      setAuthUser({
-        userid: '',
-        username: '',
-        name: '',
-        role: '',
-        email: '',
-        phone: 0
-      })
+    if (getRefreshToken) {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/auth/refreshauthstate`, { refreshToken: getRefreshToken },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      console.log(data)
+      if (data.status === "success") {
+        setIsLoggedIn(true);
+        setAuthUser({
+          userid: data.user.id,
+          username: data.user.username,
+          name: data.user.name,
+          role: data.user.role,
+          email: data.user.email,
+          phone: data.user.phone,
+        })
+      } else {
+        setIsLoggedIn(false);
+        setAuthUser({
+          userid: '',
+          username: '',
+          name: '',
+          role: '',
+          email: '',
+          phone: 0
+        })
 
+      }
     }
   }, [setAuthUser, setIsLoggedIn])
 

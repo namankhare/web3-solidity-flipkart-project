@@ -30,34 +30,34 @@ const signup = async (req, res, next) => {
 }
 
 const signin = async (req, res, next) => {
-    const { email, password } = req.body;
+    const { email } = req.body;
+    const plainPassword = req.body.password;
     try {
-        if (!(email && password)) {
+        if (!(email && plainPassword)) {
             res.status(400).json({ message: "All fields are required" });
         }
 
-        const existingUser = await User.findOne({ email });
+        const user = await User.findOne({ email });
+        const { password, ...existingUser } = user._doc;
+
 
         if (!existingUser) {
             res.status(400).json({ message: "User not found, signup please" });
         }
         else {
-            const isPasswordCorrect = await bycrypt.compare(password, existingUser.password);
+            const isPasswordCorrect = await bycrypt.compare(plainPassword, password);
             if (!isPasswordCorrect) {
                 res.status(400).json({ message: "Invalid credentials" });
             }
             else {
-
                 const token = jwt.sign({ _id: existingUser._id, email: existingUser.email }, process.env.JWT_SECRET, { expiresIn: "60s" });
-                res.cookie(existingUser._id, token, {
-                    httpOnly: true,
-                    expires: new Date(Date.now() + 60 * 1000),
-                    sameSite: 'lax',
-                    secure: true
-                })
+
+                res.cookie("token", token, { expires: new Date(Date.now() + 60 * 1000), httpOnly: true, sameSite: "None", secure: true })
+
                 const refreshToken = jwt.sign({ _id: existingUser._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
                 res.status(200).json({
+                    user: existingUser,
                     message: "Sucessfully logged in",
                     token,
                     refreshToken,
@@ -81,7 +81,7 @@ const refresh = async (req, res, next) => {
     if (cookies === undefined) {
         return res.status(401).json({ message: "Not authenticated" });
     }
-    const previousAccessToken = cookies.split('=')[1];
+    const previousAccessToken = req.cookies.token
     const previousRefreshToken = req.body.refreshToken;
 
     console.log(previousAccessToken, previousRefreshToken);
@@ -94,12 +94,9 @@ const refresh = async (req, res, next) => {
     }
 
     const accessToken = jwt.sign({ _id: parsedAccessToken._id, email: parsedAccessToken.email }, process.env.JWT_SECRET, { expiresIn: "1min" });
-    res.cookie(parsedAccessToken._id, accessToken, {
-        httpOnly: true,
-        expires: new Date(Date.now() + 60 * 1000),
-        sameSite: 'lax',
-        secure: true
-    })
+
+    res.cookie("token", accessToken, { expires: new Date(Date.now() + 60 * 1000), httpOnly: true, sameSite: "None", secure: true })
+
     const refreshToken = jwt.sign({ _id: parsedRefreshToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
     res.status(200).json({
@@ -109,6 +106,26 @@ const refresh = async (req, res, next) => {
         status: 'success'
     })
 
+}
+
+const refreshAuthState = async (req, res, next) => {
+    const accessToken = req.cookies.token || req.body.refreshToken
+
+    if (!accessToken) {
+        return res.json({ message: "User not authenticated!", status: false })
+    }
+    if (accessToken === "undefined") {
+        return res.json({ message: "User not authenticated!", status: false })
+    }
+    // console.log(accessToken)
+    let parsedAccessToken = await parseJwt(accessToken)
+    const user = await User.findOne({ _id: parsedAccessToken._id });
+    const { password, ...existingUser } = user._doc;
+
+    let token = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME || "60s" });
+    res.cookie("token", token, { expire: new Date() + 9999, httpOnly: true, sameSite: "None", secure: true })
+    let newRefreshToken = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+    return res.json({ token: token, refreshToken: newRefreshToken, status: true, user: existingUser })
 }
 
 const isSignedIn = expressjwt({
@@ -152,4 +169,4 @@ const signout = (req, res, next) => {
     res.status(200).json({ message: "Sucessfully logged out" });
 }
 
-export { signin, signup, refresh, isSignedIn, isAdmin, isSeller, isUser, signout };
+export { signin, signup, refresh, isSignedIn, isAdmin, isSeller, isUser, signout, refreshAuthState };
