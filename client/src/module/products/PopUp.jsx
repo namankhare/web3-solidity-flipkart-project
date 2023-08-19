@@ -35,6 +35,9 @@ const Close = styled.div`
 `;
 
 export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type }) => {
+
+  let item = products.find((p) => {return p._id === type})
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -63,10 +66,12 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
     {
       e.preventDefault();
       try {
-        const oldData = await apiClient.get(`/seller/getItem/${type}`)
-        console.log(oldData.data.product);
-        // const { data } = await apiClient.put(`${import.meta.env.VITE_BACKEND_URL}/seller/updateItem/${type}`)
-        // console.log(data.product);
+        let rawData = {};
+        Object.keys(formRawData).forEach((key) => {
+          rawData[key] = formRawData[key]
+        })
+        // const data  = await apiClient.put(`/seller/updateItem/${type}`,rawData)
+        console.log(rawData);
         // setProducts([...products, data.product])
 
       } catch (error) {
@@ -81,31 +86,31 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
         <form onSubmit={addOrUpdate}>
           <div className="mb-1">
             <label className="form-label">Product Name</label>
-            <input type="text" className="form-control"  />
+            <input type="text" className="form-control" value={item.name}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product MRP</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control"  value={item.MRP}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Discount provided</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control"  value={item.discount}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product SKU</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control"  value={item.SKU}/>
           </div>
           <div className="mb-1">
             <label className="form-label">FLT discount</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control"  value={item.points}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product Description</label>
-            <input type="text" className="form-control"  />
+            <input type="text" className="form-control" value={item.description} />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Image</label>
-            <input type="file" accept="image/*" className="form-control" />
+            <input type="file" accept="image/*" className="form-control"/>
           </div>
 
           <button type="submit" className="btn btn-primary mt-2">Submit</button>
