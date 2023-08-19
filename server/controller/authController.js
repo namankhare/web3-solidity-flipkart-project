@@ -74,37 +74,49 @@ const signin = async (req, res, next) => {
 
 // payload extraction
 const parseJwt = (token) => {
-    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    try {
+        return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    } catch (error) {
+        return null
+    }
 }
 const refresh = async (req, res, next) => {
-    const cookies = req.headers.cookie;
-    if (cookies === undefined) {
-        return res.status(401).json({ message: "Not authenticated" });
+    try {
+        const cookies = req.headers.cookie;
+        if (cookies === undefined) {
+            return res.status(401).json({ message: "Not authenticated" });
+        }
+        const previousAccessToken = req.cookies.token
+        const previousRefreshToken = req.body.refreshToken;
+
+        console.log(previousAccessToken, previousRefreshToken);
+
+        const parsedAccessToken = parseJwt(previousAccessToken);
+        const parsedRefreshToken = parseJwt(previousRefreshToken);
+
+        if (!previousRefreshToken) {
+            return res.status(401).json({ message: "Not authenticated" });
+        }
+
+        const accessToken = jwt.sign({ _id: parsedAccessToken._id, email: parsedAccessToken.email }, process.env.JWT_SECRET, { expiresIn: "1min" });
+
+        res.cookie("token", accessToken, { expires: new Date(Date.now() + 60 * 1000), httpOnly: true, sameSite: "None", secure: true })
+
+        const refreshToken = jwt.sign({ _id: parsedRefreshToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+
+        res.status(200).json({
+            message: "Sucessfully refreshed access",
+            accessToken,
+            refreshToken,
+            status: 'success'
+        })
+    } catch (error) {
+        res.status(200).json({
+            message: "Error Occoured",
+            status: 'error'
+        })
+        console.log(error)
     }
-    const previousAccessToken = req.cookies.token
-    const previousRefreshToken = req.body.refreshToken;
-
-    console.log(previousAccessToken, previousRefreshToken);
-
-    const parsedAccessToken = parseJwt(previousAccessToken);
-    const parsedRefreshToken = parseJwt(previousRefreshToken);
-
-    if (!previousRefreshToken) {
-        return res.status(401).json({ message: "Not authenticated" });
-    }
-
-    const accessToken = jwt.sign({ _id: parsedAccessToken._id, email: parsedAccessToken.email }, process.env.JWT_SECRET, { expiresIn: "1min" });
-
-    res.cookie("token", accessToken, { expires: new Date(Date.now() + 60 * 1000), httpOnly: true, sameSite: "None", secure: true })
-
-    const refreshToken = jwt.sign({ _id: parsedRefreshToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
-
-    res.status(200).json({
-        message: "Sucessfully refreshed access",
-        accessToken,
-        refreshToken,
-        status: 'success'
-    })
 
 }
 
@@ -133,13 +145,11 @@ const isSignedIn = expressjwt({
     algorithms: ['HS256'],
     userProperty: 'auth',
     getToken: (req) => {
-        if (req.headers.cookie) {
-            const cookies = req.headers.cookie;
-            const token = cookies.split('=')[1];
+        if (req.cookies.token) {
+            const token = req.cookies.token
             return token;
         }
         else {
-
             return null;
         }
     }
@@ -165,8 +175,8 @@ const isUser = (req, res, next) => {
 }
 
 const signout = (req, res, next) => {
-    res.clearCookie(req.auth._id);
-    res.status(200).json({ message: "Sucessfully logged out" });
+    res.clearCookie("token");
+    res.status(200).json({ data: null, message: "Sucessfully logged out", status: "success" });
 }
 
 export { signin, signup, refresh, isSignedIn, isAdmin, isSeller, isUser, signout, refreshAuthState };

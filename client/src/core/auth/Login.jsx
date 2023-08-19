@@ -4,6 +4,7 @@ import logIn from "../../assets/img/sammy-29.png";
 import axios from "axios";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useContext } from "react";
+import toast from 'react-hot-toast';
 
 const Login = () => {
     const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
@@ -20,6 +21,7 @@ const Login = () => {
             withCredentials: true
         })
             .then(({ data }) => {
+                toast.success(data.message)
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("refreshtoken", data.refreshToken);
                 setIsLoggedIn(true);
@@ -31,9 +33,7 @@ const Login = () => {
                     email: data.user.email,
                     phone: data.user.phone,
                 })
-                // setTimeout(() => {
-                //     navigate('/')
-                // }, 2000);
+                navigate("/")
 
             })
             .catch((err) => console.log({ err }));

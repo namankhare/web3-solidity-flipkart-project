@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from './context/GlobalContext';
 
 const Web3 = () => {
-    const [isConnected, setIsConnected] = useState(false);
-    const [walletAddress, setWalletAddress] = useState('');
+    const { isWalletConnected, setIsWalletConnected, walletAddress, setWalletAddress } = useContext(GlobalContext);
     const [errorMessage, setErrorMessage] = useState('');
 
     const connectToMetamask = async () => {
@@ -10,7 +10,7 @@ const Web3 = () => {
             if (window.ethereum) {
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 setWalletAddress(accounts[0]);
-                setIsConnected(true);
+                setIsWalletConnected(true);
             } else {
                 setErrorMessage('Metamask not found');
             }
@@ -26,7 +26,7 @@ const Web3 = () => {
                     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
                     if (accounts.length > 0) {
                         setWalletAddress(accounts[0]);
-                        setIsConnected(true);
+                        setIsWalletConnected(true);
                     }
                 } catch (error) {
                     console.error('Error checking Metamask connection:', error);
@@ -52,7 +52,7 @@ const Web3 = () => {
                 });
                 console.log('Metamask disconnected');
                 setWalletAddress('');
-                setIsConnected(false);
+                setIsWalletConnected(false);
             } catch (error) {
                 console.error('Error disconnecting Metamask:', error);
             }
@@ -63,7 +63,7 @@ const Web3 = () => {
 
     return (
         <div>
-            {isConnected ? (
+            {isWalletConnected ? (
                 <div>
                     <p>Connected to Metamask</p>
                     <p>Wallet Address: {walletAddress}</p>

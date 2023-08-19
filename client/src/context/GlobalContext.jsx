@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, createContext } from 'react'
 
 const userDetail = {
@@ -20,12 +21,12 @@ const userDetail = {
 
 export const GlobalContext = createContext(null);
 
-// eslint-disable-next-line react/prop-types
 const ContextProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(userDetail);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cart, setCart] = useState([]);
-
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState('');
 
   return (
     <GlobalContext.Provider value={{
@@ -34,7 +35,11 @@ const ContextProvider = ({ children }) => {
       isLoggedIn,
       setIsLoggedIn,
       cart,
-      setCart
+      setCart,
+      isWalletConnected,
+      setIsWalletConnected,
+      walletAddress,
+      setWalletAddress
     }}>
       {children}
     </GlobalContext.Provider>

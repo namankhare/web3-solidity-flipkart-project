@@ -4,9 +4,7 @@ import App from "./App.jsx";
 import "./style.css";
 import Web3 from "./web3.jsx";
 import ContextProvider from "./context/GlobalContext.jsx";
-
-
-
+import { Toaster } from 'react-hot-toast';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -14,6 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Router>
       {/* <Web3 /> */}
       <App />
+      <Toaster />
     </Router>
   </ContextProvider>
 );
