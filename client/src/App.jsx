@@ -9,7 +9,7 @@ import Rewards from "./core/rewards/Rewards";
 import "./style.css";
 
 function App() {
-
+  console.log(import.meta.env.VITE_BACKEND_URL)
   return (
     <>
 
