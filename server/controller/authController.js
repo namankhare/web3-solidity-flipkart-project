@@ -50,9 +50,9 @@ const signin = async (req, res, next) => {
                 res.status(400).json({ message: "Invalid credentials" });
             }
             else {
-                const token = jwt.sign({ _id: existingUser._id, email: existingUser.email }, process.env.JWT_SECRET, { expiresIn: "60s" });
+                const token = jwt.sign({ _id: existingUser._id, email: existingUser.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-                res.cookie("token", token, { expires: new Date(Date.now() + 60 * 1000), httpOnly: true, sameSite: "None", secure: true })
+                res.cookie("token", token, { expires: new Date(Date.now() + 60 * 1000 * 24), httpOnly: true, sameSite: "None", secure: true })
 
                 const refreshToken = jwt.sign({ _id: existingUser._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
@@ -100,7 +100,7 @@ const refresh = async (req, res, next) => {
 
         const accessToken = jwt.sign({ _id: parsedAccessToken._id, email: parsedAccessToken.email }, process.env.JWT_SECRET, { expiresIn: "1min" });
 
-        res.cookie("token", accessToken, { expires: new Date(Date.now() + 60 * 1000), httpOnly: true, sameSite: "None", secure: true })
+        res.cookie("token", accessToken, { expires: new Date(Date.now() + 60 * 1000 * 24), httpOnly: true, sameSite: "None", secure: true })
 
         const refreshToken = jwt.sign({ _id: parsedRefreshToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
@@ -134,7 +134,7 @@ const refreshAuthState = async (req, res, next) => {
     const user = await User.findOne({ _id: parsedAccessToken._id });
     const { password, ...existingUser } = user._doc;
 
-    let token = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME || "60s" });
+    let token = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME || "1d" });
     res.cookie("token", token, { expire: new Date() + 9999, httpOnly: true, sameSite: "None", secure: true })
     let newRefreshToken = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
     return res.json({ token: token, refreshToken: newRefreshToken, status: "success", user: existingUser })

@@ -16,6 +16,9 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+// expose images
+app.use('/img', express.static('assets'));
+
 
 // Route
 import router from './router.js';
