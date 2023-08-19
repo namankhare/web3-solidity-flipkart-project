@@ -11,13 +11,13 @@ const Navbar = () => {
         style={{ background: "#2874f0" }}
       >
         <div className="container-fluid">
-          <a class="navbar-brand" href="#">
+          <a className="navbar-brand" href="#">
             <img
               src={defaultImage}
               alt=""
               width="30"
               height="24"
-              class="d-inline-block align-text-top"
+              className="d-inline-block align-text-top"
             />
             FlipShop
           </a>

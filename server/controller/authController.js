@@ -126,9 +126,28 @@ const isSignedIn = expressjwt({
     }
 })
 
+const isAdmin = (req, res, next) => {
+    if(req.auth.role < 2){
+        return res.status(403).json({message: "You are not authorized"});
+    }
+    next();
+}
+const isSeller = (req, res, next) => {
+    if(req.auth.role < 1){
+        return res.status(403).json({message: "You are not authorized"});
+    }
+    next();
+}
+const isUser = (req, res, next) => {
+    if(req.auth.role == 1){
+        return res.status(403).json({message: "You are not authorized"});
+    }
+    next();
+}
+
 const signout = (req, res, next) => {
     res.clearCookie(req.auth._id);
     res.status(200).json({message: "Sucessfully logged out"});
 }
 
-export {signin, signup, refresh, isSignedIn, signout};
+export {signin, signup, refresh, isSignedIn,isAdmin,isSeller,isUser ,signout};

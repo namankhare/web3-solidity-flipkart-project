@@ -18,5 +18,11 @@ router.use('/seller', sellerRoute);
 import adminRoute from './routes/adminRoute.js';
 router.use('/admin', adminRoute);
 
+// web3 Router
+import userDetailRoute from './web3/routes/userDetailRoute.js';
+router.use('/web3', userDetailRoute);
+
+
+
 
 export default router;

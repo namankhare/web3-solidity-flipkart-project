@@ -7,7 +7,7 @@ const app = express();
 dotenv.config();
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Route

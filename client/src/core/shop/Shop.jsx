@@ -3,6 +3,7 @@ import Navbar from "../../module/header/Navbar";
 import Footer from "../../module/footer/Footer";
 import laddoo from "../../assets/img/laddoo.jpg";
 import "../../assets/css/dashboard.css";
+import Header from "../../module/header/Header";
 
 // build this first using demo JSON data
 const ProductList = () => {
@@ -121,6 +122,7 @@ const ProductList = () => {
 
   return (
     <div>
+      <Header />
       <Navbar />
       <div className="container mt-5 ">
         <div className="row mt-4">
