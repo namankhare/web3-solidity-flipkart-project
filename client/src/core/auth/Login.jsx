@@ -2,7 +2,11 @@ import { useNavigate } from "react-router-dom";
 import "../../assets/css/auth.css";
 import logIn from "../../assets/img/sammy-29.png";
 import axios from "axios";
+import { GlobalContext } from "../../context/GlobalContext";
+import { useContext } from "react";
+
 const Login = () => {
+    const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
 
     const navigate = useNavigate();
     const submitHandler = async (e) => {
@@ -12,11 +16,24 @@ const Login = () => {
             password: e.target[1].value
         }
 
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/signin`, bodyData)
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/signin`, bodyData, {
+            withCredentials: true
+        })
             .then(({ data }) => {
-                // console.log(data.token); 
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("refreshtoken", data.refreshToken);
+                setIsLoggedIn(true);
+                setAuthUser({
+                    userid: data.user._id,
+                    username: data.user.username,
+                    name: data.user.name,
+                    role: data.user.role,
+                    email: data.user.email,
+                    phone: data.user.phone,
+                })
+                // setTimeout(() => {
+                //     navigate('/')
+                // }, 2000);
 
             })
             .catch((err) => console.log({ err }));
