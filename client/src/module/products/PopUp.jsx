@@ -38,7 +38,15 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      
+      let formRawData = {
+        name: e.target[0].value,
+        MRP: e.target[1].value,
+        discount: e.target[2].value,
+        SKU: e.target[3].value,
+        points: e.target[4].value,
+        description: e.target[5].value,
+        photo: e.target[6].files[0]
+      }
       const formData = new FormData()
       Object.keys(formRawData).forEach((key) => {
         formData.append(key, formRawData[key])
@@ -57,10 +65,8 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
     setVisiblePop(false);
   }
   const addOrUpdate = async (e) => {
-    if(type === "add") 
-    {submitHandler(e)}
-    else
-    {
+    if (type === "add") { submitHandler(e) }
+    else {
       e.preventDefault();
       try {
         const oldData = await apiClient.get(`/seller/getItem/${type}`)
@@ -81,27 +87,27 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
         <form onSubmit={addOrUpdate}>
           <div className="mb-1">
             <label className="form-label">Product Name</label>
-            <input type="text" className="form-control"  />
+            <input type="text" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product MRP</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Discount provided</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product SKU</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">FLT discount</label>
-            <input type="number" className="form-control"  />
+            <input type="number" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Description</label>
-            <input type="text" className="form-control"  />
+            <input type="text" className="form-control" />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Image</label>
