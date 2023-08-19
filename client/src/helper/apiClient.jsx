@@ -2,7 +2,7 @@ import axios from "axios";
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`
 const apiClient = axios.create({
-    baseURL: import.meta.env.BACKEND_URL || "http://localhost:5000/api",
+    baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api",
     withCredentials: true,
     headers: {
         "Content-type": "application/json",
@@ -26,7 +26,7 @@ apiClient.interceptors.response.use(
             try {
                 let getRefreshToken = localStorage.getItem("refreshtoken");
                 const { data } = await axios.post(
-                    `${import.meta.env.BACKEND_URL}/auth/renewAccessToken`, { refreshToken: getRefreshToken },
+                    `${import.meta.env.VITE_BACKEND_URL}/auth/refresh`, { refreshToken: getRefreshToken },
                     {
                         withCredentials: true,
                         headers: {

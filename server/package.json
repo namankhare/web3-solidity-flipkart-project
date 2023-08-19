@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon index.js"
+    "dev": "cross-env  NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,11 +14,13 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-jwt": "^8.4.1",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.3",
+    "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
     "web3": "^4.1.0"
   }
