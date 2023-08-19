@@ -5,7 +5,6 @@ import Navbar from "../../module/header/Navbar";
 const Dashboard = () => {
   return (
     <div>
-      <Navbar />
       <Base />
     </div>
   );
