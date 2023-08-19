@@ -78,9 +78,10 @@ const pointsGainWithPurchase = (total) => {
     return FLT;
 }
 
-const checkoutWithPoints = async (req, res, next) => {
+const checkout = async (req, res, next) => {
     try {
         const data = req.body.products;
+        const usePoints = req.body.usePoints;
         if (!data) {
             return res.status(404).json({ message: "No products found" });
         }
@@ -94,7 +95,8 @@ const checkoutWithPoints = async (req, res, next) => {
             let product = await Product.findById(item.id);
             let currentPrice = (product.MRP - product.discount) * item.qnt;
             // console.log(currentPrice, product.points);
-            let coinsReq = product.points * item.qnt;
+            let coinsReq = 0
+            if(usePoints === true) coinsReq = (product.points/100) * currentPrice * item.qnt;
             let enough = false;
 
             if (userCurrentPoints >= coinsReq) {
@@ -120,51 +122,72 @@ const checkoutWithPoints = async (req, res, next) => {
 
 
         const items = await Promise.all(data.map(item => payHelper(item)));
-        console.log(totalDiscountWithPoints, userCurrentPoints);
+        // console.log(totalDiscountWithPoints, userCurrentPoints);
         const FLT = (pointsGainWithPurchase(finalAmount));
 
-        res.status(200).json({ message: "Amount to be paid", items, totalDiscountWithPoints, userCurrentPoints, FLT, finalAmount });
+        let OrderHistory = user.OrderHistory;
+
+        const order = await Promise.all(items.map(async (product) => {
+            return {
+                productId: product.id,
+                quantity: product.qnt,
+                pointsEarned: product.pointsEarned,
+                pointsRedeemed: product.pointsRedeemed,
+                price: product.price,
+                paymentMethod: product.paymentMethod,
+                dateOfOrder: product.dateOfOrder
+            }
+        }));
+
+        OrderHistory.push(order);
+        console.log(OrderHistory);
+
+        const updatedPoints = userCurrentPoints + FLT;
+
+        await User.findByIdAndUpdate(req.auth._id, { points: updatedPoints, OrderHistory }, { new: true });
+
+        res.status(200).json({ message: "Amount to be paid", items, totalDiscountWithPoints, updatedPoints, FLT, finalAmount,OrderHistory });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-const checkoutWithoutPoints = async (req, res, next) => {
-    try {
-        const data = req.body.products;
-        if (!data) {
-            return res.status(404).json({ message: "No products found" });
-        }
+// const checkoutWithoutPoints = async (req, res, next) => {
+//     try {
+//         const data = req.body.products;
+//         if (!data) {
+//             return res.status(404).json({ message: "No products found" });
+//         }
 
-        let finalAmount = 0;
-        let totalDiscountWithPoints = 0;
-        const user = await User.findById(req.auth._id);
-        let userCurrentPoints = user.points;
+//         let finalAmount = 0;
+//         let totalDiscountWithPoints = 0;
+//         const user = await User.findById(req.auth._id);
+//         let userCurrentPoints = user.points;
 
-        const payHelper = async (item) => {
-            let product = await Product.findById(item.id);
-            let currentPrice = (product.MRP - product.discount) * item.qnt;
-            finalAmount += currentPrice;
-            return (
-                {
-                    id: item.id,
-                    qnt: item.qnt,
-                    pointsEarned: pointsGainWithPurchase(currentPrice),
-                    pointsRedeemed: 0,
-                    price: currentPrice
-                }
-            )
-        };
+//         const payHelper = async (item) => {
+//             let product = await Product.findById(item.id);
+//             let currentPrice = (product.MRP - product.discount) * item.qnt;
+//             finalAmount += currentPrice;
+//             return (
+//                 {
+//                     id: item.id,
+//                     qnt: item.qnt,
+//                     pointsEarned: pointsGainWithPurchase(currentPrice),
+//                     pointsRedeemed: 0,
+//                     price: currentPrice
+//                 }
+//             )
+//         };
 
-        const items = await Promise.all(data.map(item => payHelper(item)));
-        const FLT = pointsGainWithPurchase(finalAmount);
+//         const items = await Promise.all(data.map(item => payHelper(item)));
+//         const FLT = pointsGainWithPurchase(finalAmount);
 
-        res.status(200).json({ message: "Amount to be paid", items, totalDiscountWithPoints, userCurrentPoints, FLT, finalAmount });
+//         res.status(200).json({ message: "Amount to be paid", items, totalDiscountWithPoints, userCurrentPoints, FLT, finalAmount });
 
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
 
 const afterPaymentUser = async (req, res, next) => {
     try {
@@ -189,9 +212,9 @@ const afterPaymentUser = async (req, res, next) => {
         OrderHistory.push(order);
         console.log(OrderHistory);
 
-        const updatedPoins = userCurrentPoints + FLT;
+        const updatedPoints = userCurrentPoints + FLT;
 
-        const user = await User.findByIdAndUpdate(req.auth._id, { points: updatedPoins, OrderHistory }, { new: true });
+        const user = await User.findByIdAndUpdate(req.auth._id, { points: updatedPoints, OrderHistory }, { new: true });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -202,4 +225,4 @@ const afterPaymentUser = async (req, res, next) => {
     }
 }
 
-export { getUser, updateUser, deleteUser, viewProducts, getItem, checkoutWithPoints, checkoutWithoutPoints, afterPaymentUser };
+export { getUser, updateUser, deleteUser, viewProducts, getItem, checkout};
