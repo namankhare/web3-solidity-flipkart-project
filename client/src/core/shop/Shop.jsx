@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../../module/header/Navbar";
+import Footer from "../../module/footer/Footer";
 import laddoo from "../../assets/img/laddoo.jpg";
 import "../../assets/css/dashboard.css";
 import Header from "../../module/header/Header";
@@ -158,6 +159,7 @@ const ProductList = () => {
           </div> */}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

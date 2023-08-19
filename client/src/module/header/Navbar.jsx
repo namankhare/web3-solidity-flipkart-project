@@ -35,9 +35,9 @@ const Navbar = () => {
           </button>
           <div
             className="collapse navbar-collapse "
-            id="navbarSupportedContent"
+            id="navbarSupportedContent "
           >
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
               <li className="nav-item dropdown px-3">
                 <a
                   className="nav-link active dropdown-toggle"

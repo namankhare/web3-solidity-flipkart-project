@@ -1,6 +1,196 @@
 import React from "react";
+import logo from "/vite.svg";
 
 const Footer = () => {
-  return <div>hii navbar</div>;
+  const social = {
+    background: "#01b8e9",
+    borderRadius: "50%",
+    color: "white",
+    height: "30px",
+    width: "30px",
+    textDecoration: "none",
+  };
+  return (
+    <>
+      <div className="container-fluid " style={{ background: "#172337" }}>
+        <div className="container">
+          <div className="row p-2">
+            <div className="col-lg-3 col-sm-12 col-md-4 d-flex flex-column my-2 box">
+              <div className="my-4">
+                <img height={70} src={logo} alt="" />
+              </div>
+              <div className="my-2 text-white">
+                <h6>Copyright © FlipShop, 2023.</h6>
+                <h6>All Rights Reserved.</h6>
+              </div>
+              <div className="my-2 text-left d-flex align-items-center w-50 justify-content-between">
+                <a
+                  className="d-flex justify-content-center align-items-center"
+                  href="/"
+                  style={social}
+                >
+                  <i className="fa-brands fa-twitter"></i>
+                </a>
+                <a
+                  className="d-flex justify-content-center align-items-center"
+                  href="/"
+                  style={social}
+                >
+                  <i className="fa-brands fa-facebook-f"></i>
+                </a>
+                <a
+                  className="d-flex justify-content-center align-items-center"
+                  href="/"
+                  style={social}
+                >
+                  <i className="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a
+                  className="d-flex justify-content-center align-items-center "
+                  href="/"
+                  style={social}
+                >
+                  <i className="fa-brands fa-instagram"></i>
+                </a>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-12 col-md-4 d-flex justify-content-center align-items-center my-2">
+              <div className="col-lg-4 d-lg-flex align-items-center flex-column">
+                <ul className="nav flex-column">
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Terms of Use
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Privacy Policy
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Contact Us
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      FlipShop Stories
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Press
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Corporate Info
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="col-lg-3 col-sm-12 col-md-4 d-flex justify-content-center align-items-center my-2">
+              <div className="d-flex flex-column justify-content-evenly align-items-center w-100">
+                <ul className="nav flex-column">
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Payments
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Shipping
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Cancellation
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      Return
+                    </a>
+                  </li>
+                  <li className="nav-item mb-2 box">
+                    <a
+                      href="/"
+                      className="nav-link p-0 text-white"
+                      style={{ minWidth: "120px" }}
+                    >
+                      FAQ
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-12 col-md-4 d-flex justify-content-center align-items-center my-2 flex-grow-1">
+              <div className="d-flex flex-column justify-content-evenly align-items-center w-100">
+                <p className="my-2 text-white ">
+                  FlipShop Internet Private Limited, Buildings Alyssa, Begonia &
+                  Clove Embassy Tech Village, Outer Ring Road,
+                  Devarabeesanahalli Village, Bengaluru, 560103, Karnataka,
+                  India CIN : U51109KA2012PTC066107
+                  <ul className="nav flex-column">
+                    <li className="nav-item mb-2 box">
+                      <a
+                        href="/"
+                        className="nav-link p-0 text-white"
+                        style={{ minWidth: "120px" }}
+                      >
+                        Telephone: 044-45614700
+                      </a>
+                    </li>
+                  </ul>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 export default Footer;

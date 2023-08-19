@@ -2,7 +2,7 @@ import React from "react";
 import Base from "../../layouts/Base";
 
 const Dashboard = () => {
-  return <Base>hii</Base>;
+  return <Base />;
 };
 
 export default Dashboard;
