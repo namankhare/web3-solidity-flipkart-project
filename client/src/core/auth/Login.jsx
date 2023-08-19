@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../assets/css/auth.css";
 import logIn from "../../assets/img/sammy-29.png";
-
+import axios from "axios"; 
 const Login = () => {
 
   const navigate = useNavigate();
@@ -12,6 +12,16 @@ const Login = () => {
         email: e.target[0].value,
         password: e.target[1].value
     }
+
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/signin`,bodyData)
+    .then(({data})=>{
+      // console.log(data.token);
+
+      localStorage.setItem("token",data.token);
+      localStorage.setItem("refreshtoken",data.refreshToken);
+
+    })
+    .catch((err)=>console.log({err}));
     
   }
 
