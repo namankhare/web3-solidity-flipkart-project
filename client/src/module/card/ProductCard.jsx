@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { GlobalContext } from '../../context/GlobalContext'
 import apiClient from '../../helper/apiClient'
 import { PopUp } from '../products/PopUp'
+import laddoo from '../../assets/img/laddoo.jpg'
 
 const ProductCard = ({item,setProducts,products}) => {
   const { authUser } = useContext(GlobalContext);
