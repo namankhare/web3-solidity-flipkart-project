@@ -1,16 +1,18 @@
-import React from "react";
+import Header from "../module/header/Header";
 import profileImage from "../assets/img/user_pic.png";
 import OrderHistory from "../module/orders/OrderHistory";
 import InviteCode from "../module/rewards/InviteCode";
 import RewardHistory from "../module/rewards/RewardHistory";
 import ViewReferral from "../module/rewards/ViewReferral";
 import "../assets/css/dashboard.css";
-
 import Footer from "../module/footer/Footer";
+import Navbar from "../module/header/Navbar";
 
 const Base = () => {
   return (
     <div>
+      <Header />
+      <Navbar />
       <div className="container-fluid">
         <div className="row shadow ">
           <div className="col-lg-4 hero-container">

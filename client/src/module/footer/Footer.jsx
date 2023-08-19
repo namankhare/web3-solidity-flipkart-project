@@ -173,7 +173,7 @@ const Footer = () => {
             </div>
             <div className="col-lg-3 col-sm-12 col-md-4 d-flex justify-content-center align-items-center my-2 flex-grow-1">
               <div className="d-flex flex-column justify-content-evenly align-items-center w-100">
-                <p className="my-2 text-white " style={paraSize}>
+                <span className="my-2 text-white ">
                   FlipShop Internet Private Limited, Buildings Alyssa, Begonia &
                   Clove Embassy Tech Village, Outer Ring Road,
                   Devarabeesanahalli Village, Bengaluru, 560103, Karnataka,
@@ -189,7 +189,7 @@ const Footer = () => {
                       </a>
                     </li>
                   </ul>
-                </p>
+                </span>
               </div>
             </div>
           </div>

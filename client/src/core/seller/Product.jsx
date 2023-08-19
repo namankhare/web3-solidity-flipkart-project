@@ -1,18 +1,20 @@
-import React from "react";
+import { useState } from "react";
 import { AddProduct } from "../../module/products/AddProduct";
-import { DeleteProduct } from "../../module/products/DeleteProduct";
 import { ViewProduct } from "../../module/products/ViewProduct";
 import Navbar from "../../module/header/Navbar";
 import Header from "../../module/header/Header";
 
 const Product = () => {
+  const [products, setProducts] = useState([]);
+
   return (
     <>
-    <Header/>
-      <Navbar/>
-      <AddProduct/>
+      <Header />
+      <Navbar />
+      <AddProduct products={products} setProducts={setProducts} />
       {/* <DeleteProduct/> */}
-      <ViewProduct/>
+      <ViewProduct products={products} setProducts={setProducts} />
+
     </>
   );
 };

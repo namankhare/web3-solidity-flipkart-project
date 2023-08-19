@@ -1,10 +1,11 @@
 import express from 'express';
 import {afterPaymentSeller, deleteItem, getAllItems, launchProduct, updateItem} from '../controller/sellerController.js';
 import { isSeller, isSignedIn } from '../controller/authController.js';
+import { upload } from '../helper/multer.js';
 
 const sellerRouter = express.Router();
 
-sellerRouter.post('/createProducts', isSignedIn ,isSeller, launchProduct);
+sellerRouter.post('/createProducts', isSignedIn ,isSeller,upload.single('photo'), launchProduct);
 sellerRouter.get('/getAllItems', isSignedIn ,isSeller, getAllItems);
 sellerRouter.put('/updateItem/:id', isSignedIn ,isSeller, updateItem);
 sellerRouter.delete('/deleteItem/:id', isSignedIn ,isSeller, deleteItem);
