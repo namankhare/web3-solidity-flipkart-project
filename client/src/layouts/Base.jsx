@@ -3,11 +3,13 @@ import profileImage from "../assets/img/user_pic.png";
 import OrderHistory from "../module/orders/OrderHistory";
 import "../assets/css/dashboard.css";
 import Footer from "../module/footer/Footer";
+import Navbar from "../module/header/Navbar";
 
 const Base = () => {
   return (
     <div>
       <Header />
+      <Navbar />
       <div className="container-fluid">
         <div className="row shadow mt-3 ">
           <div className="col-lg-4 hero-container">
