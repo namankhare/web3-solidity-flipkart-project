@@ -2,6 +2,7 @@ import Product from "../model/product.js";
 import User from "../model/user.js";
 import { uniqueSuffix } from "../helper/multer.js"
 import fs from 'fs'
+
 const launchProduct = async (req, res, next) => {
     const { name, MRP, discount, points, SKU, description } = req.body;
     if (!(name && MRP && discount && points && SKU && description)) {
