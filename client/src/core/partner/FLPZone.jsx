@@ -5,6 +5,7 @@ import { GlobalContext } from "../../context/GlobalContext";
 import apiClient from "../../helper/apiClient";
 import rewardImage from "../../assets/img/rewards.png";
 import AvailableRewardsCard from "../../module/partner/AvailableRewardsCard";
+import { Link } from "react-router-dom";
 
 const FLPZone = () => {
     const { walletAddress } = useContext(GlobalContext);
@@ -26,12 +27,12 @@ const FLPZone = () => {
 
     const FLCZone = () => {
         return (
-            <div className="col-12 col-md-8 col-lg-8 shadow px-4 m-auto">
+            <div className="col-12 col-md-8 col-lg-8 shadow px-4 m-auto bg-white">
                 <div className=" my-4">
                     <h5 className="">Loyalty Coins Balance: {loyaltyCoins}</h5>
                 </div>
                 <div className="text-left">
-                    <button className="btn btn-outline-primary">View Coin Activity</button>
+                    <Link className="btn btn-outline-primary" to='/rewards'>View Coin Activity</Link>
                 </div>
                 <div className="my-4">
                     <div className="row">

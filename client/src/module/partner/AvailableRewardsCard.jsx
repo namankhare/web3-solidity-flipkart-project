@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import apiClient from "../../helper/apiClient";
+import { toast } from "react-hot-toast";
 
 const partner_rewards = [
     {
@@ -97,8 +99,20 @@ const Close = styled.div`
 
 
 const AvailableRewardsCard = () => {
-    const [isRewardPopupVisible, setIsRewardPopupVisible] = useState(true);
+    const [isRewardPopupVisible, setIsRewardPopupVisible] = useState(false);
     const [popupModalData, setPopupModalData] = useState([]);
+    const [allRewardItems, setAllRewardItems] = useState([])
+    useEffect(() => {
+        apiClient.get(`/partner/getAllPartnerItems`)
+            .then(({ data }) => {
+                toast.success(data.message)
+                setAllRewardItems(data.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
+
 
     const RewardPopupModal = () => {
         return (
@@ -113,7 +127,7 @@ const AvailableRewardsCard = () => {
                         <h5 className="card-text"><b>About the offer: </b></h5>
                         <ul>
                             <li>
-                                Valid Until: {popupModalData.details.valid_until}
+                                Valid Until: {new Date(popupModalData.details.valid_until).toDateString()}
                             </li>
                             <li>
                                 Applicable On: {popupModalData.details.applicable_on}
@@ -149,18 +163,19 @@ const AvailableRewardsCard = () => {
         <div className="row gap-2">
             <RewardPopupModal />
             {
-                partner_rewards?.map((singleRewardCard, index) => {
-                    return (
-                        <div key={index} className="card" style={{ "width": "17rem" }}>
-                            <img src={'https://placehold.co/400'} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h5 className="card-title">{singleRewardCard.reward_name}</h5>
-                                <p className="card-text">Get {singleRewardCard.discount_percentage}% off</p>
-                                <a className="btn btn-primary" onClick={() => { setIsRewardPopupVisible(true); setPopupModalData(singleRewardCard) }}>View Offer</a>
+                allRewardItems.length > 0 ?
+                    allRewardItems.map((singleRewardCard) => {
+                        return (
+                            <div key={singleRewardCard._id} className="card" style={{ "width": "17rem" }}>
+                                <img src={'https://placehold.co/400'} className="card-img-top" alt="..." />
+                                <div className="card-body">
+                                    <h5 className="card-title">{singleRewardCard.reward_name}</h5>
+                                    <p className="card-text">Get {singleRewardCard.discount_percentage}% off</p>
+                                    <a className="btn btn-primary" onClick={() => { setIsRewardPopupVisible(true); setPopupModalData(singleRewardCard) }}>View Offer</a>
+                                </div>
                             </div>
-                        </div>
-                    )
-                })
+                        )
+                    }) : 'Opps! no rewards available right now!'
             }
         </div>
     )

@@ -47,8 +47,8 @@ const Reward = () => {
           <div className=" row my-4 ">
             {
               (walletAddress) ?
-                <div className="col-12 col-md-8 col-lg-8 shadow px-4 m-auto">
-                  <div className=" my-4">
+                <div className="col-12 col-md-8 col-lg-8 shadow px-4 m-auto bg-white">
+                  <div className="my-4">
                     <h5 className="">Loyalty Coins Balance: {loyaltyCoins}</h5>
                   </div>
                   <div className="text-center">
@@ -58,54 +58,54 @@ const Reward = () => {
                       alt="Promotion Image"
                     />
                   </div>
-                  <div className="my-4">
-                    <div className="row">
-                      <div className="col-10 col-md-10 col-lg-10">
-                        <h6 className="">Recent Coin Activity</h6>
-                      </div>
-                      <div className="col-2 col-md-2 col-lg-2">
-                        <h6 className="">Coins</h6>
-                      </div>
-                      <hr></hr>
-                      {/* Display recent coin activity here */}
+                  <div className="row mt-4">
+                    <div className="col-10 col-md-10 col-lg-10">
+                      <h6 className="">Coin Activity</h6>
                     </div>
+                    <div className="col-2 col-md-2 col-lg-2">
+                      <h6 className="">Coins</h6>
+                    </div>
+                    <hr></hr>
+                    {/* Display recent coin activity here */}
+                  </div>
+                  <div className="vh-100 overflow-auto border border-1 p-2">
                     {/* loop */}
                     {
-                      sortedPointsHistory &&
-                      sortedPointsHistory.map((singleHistory) => {
-                        let data = {}
-                        if (singleHistory[4] === "earn") {
-                          data = {
-                            name: <p className="">Credit of {singleHistory[2]}</p>,
-                            amount: <p className="text-success fs-small">+ {convertFromWei(singleHistory[3])}</p>,
-                            date: <p className="text-secondary"><small>Credited on {timestamptoDate(singleHistory[5])}</small></p>
+                      sortedPointsHistory ?
+                        sortedPointsHistory.map((singleHistory) => {
+                          let data = {}
+                          if (singleHistory[4] === "earn") {
+                            data = {
+                              name: <p className="">Credit of {singleHistory[2]}</p>,
+                              amount: <p className="text-success fs-small">+ {convertFromWei(singleHistory[3])}</p>,
+                              date: <p className="text-secondary"><small>Credited on {timestamptoDate(singleHistory[5])}</small></p>
+                            }
+                          } else if (singleHistory[4] === "redeem") {
+                            data = {
+                              name: <p className="">Redemption of {singleHistory[2]}</p>,
+                              amount: <p className="text-danger">- {convertFromWei(singleHistory[3])}</p>,
+                              date: <p className="text-secondary"><small>Debited on {timestamptoDate(singleHistory[5])}</small></p>
+                            }
+                          } else if (singleHistory[4] === "expire") {
+                            data = {
+                              name: "Expired Coins",
+                              amount: <p className="text-danger">- {convertFromWei(singleHistory[3])}</p>,
+                              date: <p className="text-secondary"><small>Expired on {timestamptoDate(singleHistory[5])}</small></p>
+                            }
                           }
-                        } else if (singleHistory[4] === "redeem") {
-                          data = {
-                            name: <p className="">Redemption of {singleHistory[2]}</p>,
-                            amount: <p className="text-danger">- {convertFromWei(singleHistory[3])}</p>,
-                            date: <p className="text-secondary"><small>Debited on {timestamptoDate(singleHistory[5])}</small></p>
-                          }
-                        } else if (singleHistory[4] === "expire") {
-                          data = {
-                            name: "Expired Coins",
-                            amount: <p className="text-danger">- {convertFromWei(singleHistory[3])}</p>,
-                            date: <p className="text-secondary"><small>Expired on {timestamptoDate(singleHistory[5])}</small></p>
-                          }
-                        }
-                        return (
-                          <div key={singleHistory[0]} className="row">
-                            <div className="col-10 col-md-10 col-lg-10">
-                              {data.name}
-                              {data.date}
+                          return (
+                            <div key={singleHistory[0]} className="row">
+                              <div className="col-10 col-md-10 col-lg-10">
+                                {data.name}
+                                {data.date}
+                              </div>
+                              <div className="col-2 col-md-2 col-lg-2">
+                                <h6 className="">{data.amount}</h6>
+                              </div>
+                              <hr />
                             </div>
-                            <div className="col-2 col-md-2 col-lg-2">
-                              <h6 className="">{data.amount}</h6>
-                            </div>
-                            <hr />
-                          </div>
-                        )
-                      })
+                          )
+                        }) : 'Loading.. Please Wait!'
                     }
                     {/* loop end */}
                   </div>

@@ -5,6 +5,7 @@ import { GlobalContext } from "../../context/GlobalContext";
 import apiClient from "../../helper/apiClient";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { hideMiddleWalletAddress } from "../../helper/helpFunc";
 
 const Navbar = () => {
   const { isLoggedIn, authUser, setAuthUser, setIsLoggedIn, isWalletConnected, walletAddress, setWalletAddress, setIsWalletConnected, setIsCartActive, isCartActive } = useContext(GlobalContext);
@@ -72,8 +73,16 @@ const Navbar = () => {
     try {
       if (window.ethereum && isLoggedIn) {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setWalletAddress(accounts[0]);
-        setIsWalletConnected(true);
+        apiClient.post(`/user/addandgetwalletaddress`, { walletAddress: accounts[0] })
+          .then(({ data }) => {
+            setWalletAddress(data.data);
+            setIsWalletConnected(true);
+            toast.success(data.message)
+          })
+          .catch((err) => {
+            toast.success("oops! error")
+            console.log(err)
+          })
       } else {
         console.log(); ('Metamask not found');
       }
@@ -106,19 +115,7 @@ const Navbar = () => {
     }
   };
 
-  function hideMiddleWalletAddress(address) {
-    const visibleChars = 4; // Number of characters to keep visible at the beginning and end
-    const ellipsis = '...';
 
-    if (address.length <= visibleChars * 2) {
-      return address; // Address is too short to hide the middle
-    }
-
-    const start = address.slice(0, visibleChars);
-    const end = address.slice(-visibleChars);
-
-    return `${start}${ellipsis}${end}`;
-  }
 
   const Wallet = () => {
     if (isWalletConnected) {
@@ -206,7 +203,7 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className="nav-item px-3">
-                    <Link className="nav-link " aria-current="page" to="/product">
+                    <Link className="nav-link " aria-current="page" to="/partner">
                       Partner Dashboard
                     </Link>
                   </li>

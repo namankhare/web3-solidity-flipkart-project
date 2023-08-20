@@ -44,5 +44,19 @@ const timestamptoDate = (timestamp) => {
     return new Date(parseInt(timestamp) * 1000).toDateString();
 }
 
+function hideMiddleWalletAddress(address) {
+    const visibleChars = 4; // Number of characters to keep visible at the beginning and end
+    const ellipsis = '...';
 
-export { delete_cookie, fromNow, timestamptoDate, convertToWei, convertFromWei }
+    if (address.length <= visibleChars * 2) {
+        return address; // Address is too short to hide the middle
+    }
+
+    const start = address.slice(0, visibleChars);
+    const end = address.slice(-visibleChars);
+
+    return `${start}${ellipsis}${end}`;
+}
+
+
+export { delete_cookie, fromNow, timestamptoDate, convertToWei, convertFromWei, hideMiddleWalletAddress }

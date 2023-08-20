@@ -14,6 +14,10 @@ router.use('/user', userRoute);
 import sellerRoute from './routes/sellerRoute.js';
 router.use('/seller', sellerRoute);
 
+// partner Router
+import partnerRoute from './routes/partnerRoute.js';
+router.use('/partner', partnerRoute);
+
 // Admin Router
 import adminRoute from './routes/adminRoute.js';
 router.use('/admin', adminRoute);

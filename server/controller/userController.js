@@ -13,6 +13,25 @@ const getUser = async (req, res, next) => {
     }
 }
 
+const addAndGetWalletAddress = async (req, res, next) => {
+    try {
+        let user = await User.findById(req.auth._id);
+        if (!user.userWallet) {
+            user = await User.findByIdAndUpdate(req.auth._id,
+                { userWallet: req.body.walletAddress },
+                { new: true });
+
+        } else if (user.userWallet && user.userWallet !== req.body.walletAddress) {
+            return res.status(501).json({ message: "Another account is already linked with this account", data: null, status: 'error' });
+        }
+
+        return res.status(200).json({ message: "Connected successfully", data: user.userWallet });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 const updateUser = async (req, res, next) => {
     try {
 
@@ -260,4 +279,4 @@ const afterPaymentUser = async (req, res, next) => {
     }
 }
 
-export { getUser, updateUser, deleteUser, viewProducts, getItem, checkout };
+export { getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress };

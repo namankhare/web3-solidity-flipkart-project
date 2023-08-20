@@ -1,10 +1,11 @@
 import express from "express";
 import { isSeller, isSignedIn } from "../controller/authController.js";
-import { getUser, updateUser, deleteUser, viewProducts, getItem, checkout } from "../controller/userController.js";
+import { getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress } from "../controller/userController.js";
 
 const userRoute = express.Router();
 
 userRoute.get("/getUser", isSignedIn, getUser);
+userRoute.post("/addandgetwalletaddress", isSignedIn, addAndGetWalletAddress);
 userRoute.put("/updateUser", isSignedIn, updateUser);
 userRoute.delete("/deleteUser", isSignedIn, isSeller, deleteUser);
 userRoute.get("/viewProducts", viewProducts);

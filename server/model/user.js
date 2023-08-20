@@ -13,6 +13,7 @@ const userSchema = new Schema({
         required: true
     },
     userWallet: {
+        unique: true,
         type: String
     },
     name: {
@@ -63,7 +64,19 @@ const userSchema = new Schema({
             uuid: String
         }
     ]],
-
+    ClaimedCoupon: [[
+        {
+            couponID: {
+                type: Schema.Types.ObjectId,
+                ref: 'Partner'
+            },
+            validUntil: Date,
+            applicableOn: String,
+            couponCode: String,
+            description: String,
+            loyaltyCoinsUsed: Number
+        }
+    ]],
     SoldItemsHistory: [[
         {
             productId: {
@@ -91,11 +104,7 @@ const userSchema = new Schema({
         dateOfReferral: Date
     }],
     referredBy: {
-        userId: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        dateOfReferral: Date
+        type: String
     }
 
 }, { timestamps: true });

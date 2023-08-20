@@ -4,11 +4,14 @@ import jwt from 'jsonwebtoken';
 import { expressjwt } from 'express-jwt';
 
 const signup = async (req, res, next) => {
-    const { username, email, name, password, referal, role, walletId} = req.body;
+    const { username, email, name, password, address, phone, referredBy, role, walletAddress } = req.body;
 
-    if (!(username && email && name && password)) {
-        res.status(400).json({ message: "All fields are required" });
+    if (!(username && email && name && password && role)) {
+        return res.status(400).json({ message: "All fields are required" });
     }
+
+    if (role > 2) return res.status(400).json({ message: "Not Allowed" });
+
 
     const existingUser = await User.findOne({ email });
 
@@ -16,15 +19,35 @@ const signup = async (req, res, next) => {
         res.status(400).json({ message: "User already exists, login instead" });
     }
     else {
-
         const hashedPassword = await bycrypt.hash(password, 12);
-        const user = new User({ ...req.body, password: hashedPassword });
+        let data = {
+            name: name,
+            username: username,
+            email: email,
+            address: address,
+            phone: phone,
+            password: hashedPassword,
+            referredBy: referredBy,
+            role: role,
+            userWallet: walletAddress
+        }
+        const user = new User(data);
 
         try {
-            await user.save();
-            res.status(201).json({ message: user });
+            let saveSignup = await user.save();
+            let { password, ...signupdata } = saveSignup._doc;
+            console.log(signupdata)
+            try {
+                if (referredBy !== '' && referredBy !== null) {
+                    await User.findOneAndUpdate({ username: referredBy },
+                        { $push: { referredUsers: signupdata._id } });
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            res.status(201).json({ data: signupdata, message: "Signup Successfull", staus: "success" });
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            return res.status(500).json({ message: error.message, staus: "error" });
         }
     }
 }
