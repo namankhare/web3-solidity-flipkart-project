@@ -118,15 +118,16 @@ const ProductList = () => {
               <div className="card mb-3">
                 <img
                   src={`${import.meta.env.VITE_BACKEND_IMAGE_URL}/uploads/products/${product.productImage}`}
-                  className="card-img-top "
+                  className="card-img-top ratio ratio-1x1"
+                  style={{ "aspectRatio": "1/1" }}
                   alt={product.name}
                 />
                 <div className="card-body">
-                  <h5 className="card-title">{product.name}</h5>
+                  <h4 className="card-title fw-bolder">{product.name}</h4>
                   <p className="card-text">
                     {product.description} <br />
-                    Price: ${product.MRP} <br />
-                    Discount: {product.discount}% off
+                    Price: <s>${product.MRP}</s> <b>${product.MRP - product.discount}</b><br />
+                    Discount: FLAT ${product.discount} off
                   </p>
 
                   {

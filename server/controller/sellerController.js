@@ -48,7 +48,7 @@ const getAllItems = async (req, res, next) => {
 const getItem = async (req, res, next) => {
     try {
         const productId = req.params.id;
-        const product = await Product.find({ _id:productId });
+        const product = await Product.find({ _id: productId });
         return res.status(200).json({ product: product });
 
     } catch (error) {
@@ -69,27 +69,32 @@ const updateItem = async (req, res, next) => {
         return res.status(401).json({ message: "You are not authorized to update this product" });
     }
 
+
     try {
 
         const { name, MRP, discount, points, SKU, description } = req.body;
-        // const others = req.body;
-        
-        let photoName = uniqueSuffix + "/" + req.body.photo;
-        console.log(photoName);
+        console.log(name)
 
-        const product = await Product.findByIdAndUpdate({ _id: productId }, {
+        let updateData = {
             name,
             MRP,
             discount,
             points,
             SKU,
             description,
-            productImage: photoName
-        }, { new: true });
+        }
+
+        if (req.file !== undefined) {
+            let photoName = uniqueSuffix + "/" + req.file.filename;
+            console.log(photoName);
+            updateData.productImage = photoName
+        }
+
+        const product = await Product.findByIdAndUpdate({ _id: productId }, updateData, { new: true });
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
-        res.status(200).json({product: product });
+        res.status(200).json({ product: product });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -163,5 +168,5 @@ const afterPaymentSeller = async (req, res, next) => {
     }
 }
 
-export { launchProduct, getAllItems,getItem, updateItem, deleteItem, afterPaymentSeller };
+export { launchProduct, getAllItems, getItem, updateItem, deleteItem, afterPaymentSeller };
 

@@ -21,7 +21,7 @@ export const ViewProduct = ({ products, setProducts }) => {
         {
           products.map((item) => {
             return (
-              <ProductCard key={item._id} item={item} setProducts = {setProducts} products = {products} />
+              <ProductCard key={item._id} item={item} setProducts={setProducts} products={products} />
             )
           })
         }

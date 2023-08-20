@@ -28,12 +28,12 @@ const ProductCard = ({ item, setProducts, products }) => {
   return (
     <>
       <div className="card col-12 col-md-6 col-lg-3 ">
-        <img src={`${import.meta.env.VITE_BACKEND_IMAGE_URL}/uploads/products/${item.productImage}`} className="card-img-top mt-3" alt="..." />
+        <img src={`${import.meta.env.VITE_BACKEND_IMAGE_URL}/uploads/products/${item.productImage}`} className="card-img-top mt-3 ratio ratio-1x1" alt={item.productImage} style={{ "aspectRatio": "1/1" }} />
         <div className="card-body">
           <h5 className="card-title">{authUser.name}</h5>
           <p className="card-text">{item.name}</p>
           <p className="card-text">{item.description}</p>
-          <p className="card-text"><s><b>MRP: </b>Rs.{item.MRP}</s></p>
+          <p className="card-text"><s><b>MRP: </b>${item.MRP}</s></p>
           <p className="card-text"><b>Current Price: </b>{currentPrice}</p>
           <p className="card-text"><b>FLT can be used to further lower the price: </b>{currentPrice}-{item.points}% = {discountFinal}</p>
           <p className="card-text"><b>In Stock: </b>{item.SKU}</p>
