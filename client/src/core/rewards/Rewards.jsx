@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../../module/header/Navbar";
 import Footer from "../../module/footer/Footer";
 import "../../assets/css/dashboard.css";
@@ -11,10 +11,6 @@ const Reward = () => {
   const [loyaltyCoins, setLoyaltyCoins] = useState(0); // Initial loyalty coins balance
   const [pointsHistory, setPointsHistory] = useState(''); // Initial loyalty coins balance
   const { walletAddress } = useContext(GlobalContext);
-
-  const handleRewardReceived = (rewardAmount) => {
-    setLoyaltyCoins(loyaltyCoins + rewardAmount);
-  };
 
   useEffect(() => {
     if (walletAddress === '') {

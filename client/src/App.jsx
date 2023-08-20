@@ -12,10 +12,13 @@ import { GlobalContext } from "./context/GlobalContext";
 import axios from "axios";
 import PageNotFound from "./core/page404/PageNotFound";
 import Guideline from "./core/guidelines/guideline";
+import Partner from "./core/partner/Partner";
+import FLPZone from "./core/partner/FLPZone";
 
 function App() {
   const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
 
+  // function to refresh Auth on page reload
   const refreshAuthState = useCallback(async () => {
     let getRefreshToken = localStorage.getItem("refreshtoken");
     if (getRefreshToken) {
@@ -59,6 +62,7 @@ function App() {
   }, [setAuthUser, setIsLoggedIn]);
 
   useEffect(() => {
+    // trigger function for re-auth
     refreshAuthState();
   }, [refreshAuthState]);
   return (
@@ -73,6 +77,9 @@ function App() {
         <Route path="/rewards" element={<Rewards />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="/guidelines" element={<Guideline />} />
+        <Route path="/partner" element={<Partner />} />
+        <Route path="/flpzone" element={<FLPZone />} />
+
       </Routes>
     </>
   );

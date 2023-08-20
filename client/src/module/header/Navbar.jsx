@@ -182,23 +182,35 @@ const Navbar = () => {
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
                     <Link className="dropdown-item" to="/dashboard">
-                      Profie
+                      View Profie
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/rewards">
-                      Loyalty Coins
+                      Manage Loyalty Coins
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/flpzone">
+                      Flipshop Loyalty Zone
                     </Link>
                   </li>
                 </ul>
               </li>
               {
                 authUser && authUser?.role > 0 &&
-                <li className="nav-item px-3">
-                  <Link className="nav-link " aria-current="page" to="/product">
-                    Become A Seller
-                  </Link>
-                </li>
+                <>
+                  <li className="nav-item px-3">
+                    <Link className="nav-link " aria-current="page" to="/product">
+                      Seller Dashboard
+                    </Link>
+                  </li>
+                  <li className="nav-item px-3">
+                    <Link className="nav-link " aria-current="page" to="/product">
+                      Partner Dashboard
+                    </Link>
+                  </li>
+                </>
               }
               <li className="nav-item px-3">
                 <a className="btn nav-link" onClick={() => { setIsCartActive(!isCartActive) }}>
