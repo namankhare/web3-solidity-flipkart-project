@@ -1,6 +1,7 @@
 import User from '../model/user.js';
 import Product from '../model/product.js';
 import { signout } from './authController.js';
+import { mintAndEarnPoints, redeemUserPoints, totalUserPoints } from '../web3/utils/helper.js';
 
 const getUser = async (req, res, next) => {
     try {
@@ -82,10 +83,10 @@ const checkout = async (req, res, next) => {
     try {
         const data = req.body.products;
         const usePoints = req.body.usePoints;
+        const walletAddress = req.body.wallet || "0x638B5da1bcf9C1f27B42B43A3E894AFdf5993c28"
         if (!data) {
             return res.status(404).json({ message: "No products found" });
         }
-        // console.log(req.auth);
         let totalDiscountWithPoints = 0;
         let finalAmount = 0;
         const user = await User.findById(req.auth._id);
@@ -96,8 +97,11 @@ const checkout = async (req, res, next) => {
             let currentPrice = (product.MRP - product.discount) * item.qnt;
             // console.log(currentPrice, product.points);
             let coinsReq = 0
-            if(usePoints === true) coinsReq = (product.points/100) * currentPrice * item.qnt;
+ 
+            if (usePoints === true) coinsReq = (product.points / 100) * currentPrice;
+ 
             console.log(coinsReq);
+ 
             let enough = false;
 
             if (userCurrentPoints >= coinsReq) {
@@ -124,7 +128,32 @@ const checkout = async (req, res, next) => {
 
         const items = await Promise.all(data.map(item => payHelper(item)));
         // console.log(totalDiscountWithPoints, userCurrentPoints);
+
+        // earn points
         const FLT = (pointsGainWithPurchase(finalAmount));
+
+        // redeem points: totalDiscountWithPoints
+
+        // first check if blockchain have enough points
+        if (usePoints === true) {
+            let blockHaveEnoughPoints = await totalUserPoints(walletAddress) || 0
+            console.log("blockHaveEnoughPoints", blockHaveEnoughPoints, totalDiscountWithPoints)
+            if (blockHaveEnoughPoints < totalDiscountWithPoints && totalDiscountWithPoints > 0) {
+                return res.status(200).json({ message: "You don't have enough points to redeem", data: null, status: "error" });
+            } else if (blockHaveEnoughPoints > totalDiscountWithPoints && totalDiscountWithPoints > 0) {
+                // if have enough points redeem item
+                let redeemPoints = await redeemUserPoints(walletAddress, totalDiscountWithPoints)
+                if (redeemPoints !== "success") {
+                    return res.status(200).json({ message: "oho! error occoured! cannot proceed this time", data: null, status: "error" });
+                }
+            }
+        }
+        // lets mint and send earned points to the users wallet
+        let isMintSuccessfull = await mintAndEarnPoints(walletAddress, FLT)
+        console.log("isMintSuccessfull", isMintSuccessfull)
+        if (isMintSuccessfull !== "success") {
+            return res.status(200).json({ message: "oho! error occoured! cannot proceed this time", data: null, status: "error" });
+        }
 
         let OrderHistory = user.OrderHistory;
 
@@ -147,7 +176,7 @@ const checkout = async (req, res, next) => {
 
         await User.findByIdAndUpdate(req.auth._id, { points: updatedPoints, OrderHistory }, { new: true });
 
-        res.status(200).json({ message: "Amount to be paid", items, totalDiscountWithPoints, updatedPoints, FLT, finalAmount,OrderHistory });
+        res.status(200).json({ message: "Order Placed successfully!", items, totalDiscountWithPoints, updatedPoints, FLT, finalAmount, OrderHistory });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -226,4 +255,4 @@ const afterPaymentUser = async (req, res, next) => {
     }
 }
 
-export { getUser, updateUser, deleteUser, viewProducts, getItem, checkout};
+export { getUser, updateUser, deleteUser, viewProducts, getItem, checkout };
