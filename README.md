@@ -24,6 +24,7 @@ Blockchain-based Loyalty and Rewards Program using Fungible Tokens" is a loyalty
 - `cd` into `server` folder.
 - run `yarn` or `npm install` to install the packages.
 - use `yarn run dev` or `npm run dev` to start the project.
+- change `CONTRACT_ADMIN_WALLET` inside `.env` file
 
 ### backend(web3)
 

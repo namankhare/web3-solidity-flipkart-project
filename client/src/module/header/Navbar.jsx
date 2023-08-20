@@ -216,6 +216,11 @@ const Navbar = () => {
                   Cart
                 </a>
               </li>
+              <li className="nav-item px-3">
+                <Link className="btn nav-link" to="/guidelines">
+                  Guidelines
+                </Link>
+              </li>
             </ul>
             {
               (isLoggedIn) ?

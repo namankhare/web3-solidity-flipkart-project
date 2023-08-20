@@ -105,7 +105,7 @@ const checkout = async (req, res, next) => {
     try {
         const data = req.body.products;
         const usePoints = req.body.usePoints;
-        const walletAddress = req.body.wallet || "0x638B5da1bcf9C1f27B42B43A3E894AFdf5993c28"
+        const walletAddress = req.body.wallet
         if (!data) {
             return res.status(404).json({ message: "No products found" });
         }
@@ -174,8 +174,9 @@ const checkout = async (req, res, next) => {
             }
         }
         // lets mint and send earned points to the users wallet
+        console.log(walletAddress, FLT, orderUUID, productName)
         let isMintSuccessfull = await mintAndEarnPoints(walletAddress, FLT, orderUUID, productName)
-        console.log("isMintSuccessfull", isMintSuccessfull)
+        console.log("isMintSuccessfullyaah", isMintSuccessfull)
         if (isMintSuccessfull !== "success") {
             return res.status(200).json({ message: "oho! error occoured! cannot proceed this time", data: null, status: "error" });
         }

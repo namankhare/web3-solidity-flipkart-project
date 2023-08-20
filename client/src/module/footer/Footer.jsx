@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "/vite.svg";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const paraSize = {
@@ -63,58 +64,58 @@ const Footer = () => {
               <div className="col-lg-4 d-lg-flex align-items-center flex-column">
                 <ul className="nav flex-column">
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Terms of Use
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Privacy Policy
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Contact Us
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       FlipShop Stories
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Press
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Corporate Info
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -124,49 +125,49 @@ const Footer = () => {
               <div className="d-flex flex-column justify-content-evenly align-items-center w-100">
                 <ul className="nav flex-column">
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Payments
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Shipping
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Cancellation
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       Return
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2 box">
-                    <a
-                      href="/"
+                    <Link
+                      to="/guidelines"
                       className="nav-link p-0 text-white"
                       style={{ minWidth: "120px" }}
                     >
                       FAQ
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>

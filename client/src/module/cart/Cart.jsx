@@ -101,7 +101,8 @@ const Cart = () => {
   const handleBuyNow = () => {
     let data = {
       products: cart,
-      usePoints: usePointsRef.current.checked
+      usePoints: usePointsRef.current.checked,
+      wallet: walletAddress
     }
     apiClient.post(`/user/checkout`, data)
       .then(({ data }) => {
