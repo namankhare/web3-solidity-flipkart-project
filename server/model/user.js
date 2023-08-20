@@ -33,15 +33,15 @@ const userSchema = new Schema({
     },
     city: {
         type: String,
-        required: true
+        // required: true
     },
     pincode: {
         type: Number,
-        required: true
+        // required: true
     },
     state: {
         type: String,
-        required: true,
+        // required: true,
     },
     points: {
         type: Number,

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { expressjwt } from 'express-jwt';
 
 const signup = async (req, res, next) => {
-    const { username, email, name, password } = req.body;
+    const { username, email, name, password, referal, role, walletId} = req.body;
 
     if (!(username && email && name && password)) {
         res.status(400).json({ message: "All fields are required" });
@@ -156,6 +156,12 @@ const isSignedIn = expressjwt({
 })
 
 const isAdmin = (req, res, next) => {
+    if (req.auth.role < 3) {
+        return res.status(403).json({ message: "You are not authorized" });
+    }
+    next();
+}
+const isPartner = (req, res, next) => {
     if (req.auth.role < 2) {
         return res.status(403).json({ message: "You are not authorized" });
     }
@@ -179,4 +185,4 @@ const signout = (req, res, next) => {
     res.status(200).json({ data: null, message: "Sucessfully logged out", status: "success" });
 }
 
-export { signin, signup, refresh, isSignedIn, isAdmin, isSeller, isUser, signout, refreshAuthState };
+export { signin, signup, refresh, isSignedIn, isAdmin, isPartner, isSeller, isUser, signout, refreshAuthState };
