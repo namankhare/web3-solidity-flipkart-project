@@ -1,3 +1,4 @@
+import { Web3 } from 'web3'
 function delete_cookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
@@ -32,9 +33,16 @@ function fromNow(date, nowDate = Date.now(), rft = new Intl.RelativeTimeFormat(u
     }
 }
 
+const convertToWei = (amount) => {
+    return Web3.utils.toWei(amount, "ether");
+}
+const convertFromWei = (amount) => {
+    return Web3.utils.fromWei(amount, "ether");
+}
+
 const timestamptoDate = (timestamp) => {
     return new Date(parseInt(timestamp) * 1000).toDateString();
 }
 
 
-export { delete_cookie, fromNow, timestamptoDate }
+export { delete_cookie, fromNow, timestamptoDate, convertToWei, convertFromWei }

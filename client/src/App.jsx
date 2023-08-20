@@ -39,6 +39,8 @@ function App() {
           role: data.user.role,
           email: data.user.email,
           phone: data.user.phone,
+          referredUsers: data.user.referredUsers,
+          OrderHistory: data.user.OrderHistory
         });
       } else {
         setIsLoggedIn(false);
@@ -49,6 +51,8 @@ function App() {
           role: "",
           email: "",
           phone: 0,
+          referredUsers: [],
+          OrderHistory: []
         });
       }
     }

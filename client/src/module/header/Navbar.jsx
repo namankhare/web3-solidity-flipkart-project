@@ -24,7 +24,9 @@ const Navbar = () => {
             name: '',
             role: '',
             email: '',
-            phone: 0
+            phone: 0,
+            referredUsers: [],
+            OrderHistory: []
           })
           toast.success(data.message)
         }
@@ -41,7 +43,9 @@ const Navbar = () => {
           name: '',
           role: '',
           email: '',
-          phone: 0
+          phone: 0,
+          referredUsers: [],
+          OrderHistory: []
         })
         toast.success("Successfully Logged Out")
         console.log(err);
@@ -188,11 +192,14 @@ const Navbar = () => {
                   </li>
                 </ul>
               </li>
-              <li className="nav-item px-3">
-                <a className="nav-link " aria-current="page" href="#">
-                  Become A Seller
-                </a>
-              </li>
+              {
+                authUser && authUser?.role > 0 &&
+                <li className="nav-item px-3">
+                  <Link className="nav-link " aria-current="page" to="/product">
+                    Become A Seller
+                  </Link>
+                </li>
+              }
               <li className="nav-item px-3">
                 <a className="btn nav-link" onClick={() => { setIsCartActive(!isCartActive) }}>
                   Cart

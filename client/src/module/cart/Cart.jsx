@@ -1,10 +1,17 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import apiClient from "../../helper/apiClient";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 const Cart = () => {
-  const { cart, setCart, setIsCartActive, isCartActive } = useContext(GlobalContext);
+  const { cart, setCart, setIsCartActive, isCartActive, walletAddress } = useContext(GlobalContext);
+  const [loyaltyCoins, setLoyaltyCoins] = useState(0); // Initial loyalty coins balance
+  const usePointsRef = useRef(null);
+  const navigate = useNavigate();
+
+
   const cartStyle = {
     width: '50%',
     position: 'fixed',
@@ -26,11 +33,25 @@ const Cart = () => {
     display: isCartActive ? 'block' : 'none',
     zIndex: 999,
   };
+  useEffect(() => {
+    if (walletAddress === '') {
+      return;
+    }
+    apiClient.get(`/web3/getuserpoints`, { params: { wallet: walletAddress } })
+      .then(({ data }) => {
+        setLoyaltyCoins(data.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+
+  }, [walletAddress])
 
   const increaseQuantity = (productId) => {
     const updatedProducts = cart.map((product) =>
       product._id === productId
-        ? { ...product, quantity: product.quantity + 1 }
+        ? { ...product, qnt: product.qnt + 1 }
         : product
     );
     setCart(updatedProducts);
@@ -38,9 +59,9 @@ const Cart = () => {
   const decreaseQuantity = (productId) => {
     const updatedProducts = cart.map((product) =>
       product._id === productId
-        ? { ...product, quantity: product.quantity - 1 }
+        ? { ...product, qnt: product.qnt - 1 }
         : product
-    ).filter((product) => product.quantity > 0); // Remove products with quantity <= 0
+    ).filter((product) => product.qnt > 0); // Remove products with quantity <= 0
 
     setCart(updatedProducts);
   };
@@ -50,7 +71,7 @@ const Cart = () => {
   // Calculate the total price and loyalty points
   // const { totalPrice, totalPoints } = cart.reduce(
   //   (acc, product) => {
-  //     const productTotal = (product.MRP - product.discount) * product.quantity;
+  //     const productTotal = (product.MRP - product.discount) * product.qnt;
   //     const earnedPoints = (productTotal / 100) * 2;
   //     return {
   //       totalPrice: acc.totalPrice + productTotal,
@@ -59,14 +80,16 @@ const Cart = () => {
   //   },
   //   { totalPrice: 0, totalPoints: 0 }
   // );
-  const { totalPrice } = cart.reduce(
+  const { totalPrice, redeemTotal } = cart.reduce(
     (acc, product) => {
-      const productTotal = (product.MRP - product.discount) * product.quantity;
+      const productTotal = (product.MRP - product.discount) * product.qnt;
+      const redeemTotal = (product.points / 100) * productTotal;
       return {
         totalPrice: acc.totalPrice + productTotal,
+        redeemTotal: acc.redeemTotal + redeemTotal
       };
     },
-    { totalPrice: 0 }
+    { totalPrice: 0, redeemTotal: 0 }
   );
 
   const handleClickOutside = (event) => {
@@ -76,7 +99,22 @@ const Cart = () => {
   };
 
   const handleBuyNow = () => {
-    apiClient.post(`/user/checkout`)
+    let data = {
+      products: cart,
+      usePoints: usePointsRef.current.checked
+    }
+    apiClient.post(`/user/checkout`, data)
+      .then(({ data }) => {
+        toast.success(data.message);
+        navigate('/dashboard');
+        setCart([])
+        setIsCartActive(false);
+      })
+      .catch((err) => {
+        toast.error("Error")
+        setIsCartActive(false);
+        console.log(err)
+      })
   }
 
 
@@ -105,19 +143,17 @@ const Cart = () => {
                     let discountPrice = product.MRP - product.discount;
                     return (
                       <tr key={product._id}>
-                        <div>
-                          <td>  <img width={"20px"} height={"20px"} src={product.productImage} alt="product image" /> {product.name}</td>
-                        </div>
+                        <td>  <img width={"50px"} height={"50px"} src={`${import.meta.env.VITE_BACKEND_IMAGE_URL}/uploads/products/${product.productImage}`} alt="product image" /> {product.name}</td>
                         <td>
                           <button className="btn btn-link" onClick={() => decreaseQuantity(product._id)}>
                             <i className="fas fa-minus"></i>
                           </button>
-                          <span className="mx-2">{product.quantity}</span>
+                          <span className="mx-2">{product.qnt}</span>
                           <button className="btn btn-link" onClick={() => increaseQuantity(product._id)}>
                             <i className="fas fa-plus"></i>
                           </button>
                         </td>
-                        <td><span className="text-decoration-line-through text-secondary">${product.MRP * product.quantity}</span> <span className="text-success">${discountPrice * product.quantity}</span></td>
+                        <td><span className="text-decoration-line-through text-secondary">${product.MRP * product.qnt}</span> <span className="text-success">${discountPrice * product.qnt}</span></td>
                       </tr>
                     );
                   })}
@@ -127,13 +163,19 @@ const Cart = () => {
               <div className="p-3">
                 <strong>Total Price: ${totalPrice.toFixed(2)}</strong>
                 <p className="fst-italic">You will get <span className="fw-bold">{Math.min((Math.floor(totalPrice / 100) * 2).toFixed(0), 50)}</span> Flipkart Loyalty points for this order</p>
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="usePoints" disabled={(loyaltyCoins > 0) ? false : true} ref={usePointsRef} />
+                  <label className="form-check-label" htmlFor="usePoints" >
+                    Use {redeemTotal} out of {loyaltyCoins} Available Points?
+                  </label>
+                </div>
                 <button className="btn btn-outline-success" onClick={handleBuyNow}>
                   Buy Now
                 </button>
               </div>
 
             </div>
-          </div>
+          </div >
 
           : ''
       }

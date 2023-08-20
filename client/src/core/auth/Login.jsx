@@ -32,6 +32,8 @@ const Login = () => {
                     role: data.user.role,
                     email: data.user.email,
                     phone: data.user.phone,
+                    referredUsers: data.user.referredUsers,
+                    OrderHistory: data.user.OrderHistory
                 })
                 navigate("/")
 

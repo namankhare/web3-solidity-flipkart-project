@@ -17,6 +17,7 @@ const userDetail = {
   referredBy: '',
   createdAt: '',
   role: null,
+  referredUsers: []
 }
 
 export const GlobalContext = createContext(null);

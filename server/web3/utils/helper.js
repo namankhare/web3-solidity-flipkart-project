@@ -19,7 +19,7 @@ const fixExpiredToken = async (walletAddress) => {
                     // Expire the points
                     try {
                         const result = await loyaltyProgramContract.methods
-                            .expirePoints(i)
+                            .expirePoints(i, entry.orderId)
                             .send({ from: walletAddress, gas: 500000 });
 
                         // console.log(`Expired points for entry ${i}, Transaction Hash:`, result.transactionHash);
@@ -54,7 +54,7 @@ const totalUserPoints = async (walletAddress) => {
     }
 }
 
-const mintAndEarnPoints = async (walletAddress, pointsToEarn) => {
+const mintAndEarnPoints = async (walletAddress, pointsToEarn, orderId, orderName) => {
     try {
         await fixExpiredToken(walletAddress)
         // Authorize the LoyaltyProgram contract to mint tokens
@@ -69,7 +69,7 @@ const mintAndEarnPoints = async (walletAddress, pointsToEarn) => {
             .approve(loyaltyProgramAddress, convertToWei(pointsToEarn))
             .send({ from: walletAddress, gas: 5000000 });
         const earnResult = await loyaltyProgramContract.methods
-            .earnPoints(convertToWei(pointsToEarn))
+            .earnPoints(convertToWei(pointsToEarn), orderId, orderName)
             .send({ from: walletAddress, gas: 5000000 });
         return 'success'
 
@@ -79,11 +79,11 @@ const mintAndEarnPoints = async (walletAddress, pointsToEarn) => {
     }
 }
 
-const redeemUserPoints = async (walletAddress, pointsToRedeem) => {
+const redeemUserPoints = async (walletAddress, pointsToRedeem, orderId, orderName) => {
     try {
         await fixExpiredToken(walletAddress)
         const redeemResult = await loyaltyProgramContract.methods
-            .redeemPoints(convertToWei(pointsToRedeem))
+            .redeemPoints(convertToWei(pointsToRedeem), orderId, orderName)
             .send({ from: walletAddress, gas: 5000000 });
 
         // console.log("Redeem Points Transaction Hash:", redeemResult.transactionHash);

@@ -1,84 +1,84 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import ladoo from "../../assets/img/laddoo.jpg";
+import { useEffect } from "react";
+import apiClient from "../../helper/apiClient";
 
-const previousOrdersData = [
-  // Previous orders data...
-  {
-    id: 1,
-    productName: "Product A",
-    imageSrc: "path-to-image-A.jpg",
-    price: 25.99,
-    deliveryDate: "2023-08-15",
-  },
-  {
-    id: 2,
-    productName: "Product B",
-    imageSrc: "path-to-image-B.jpg",
-    price: 19.99,
-    deliveryDate: "2023-08-12",
-  },
-  {
-    id: 3,
-    productName: "Product C",
-    imageSrc: "path-to-image-B.jpg",
-    price: 19.99,
-    deliveryDate: "2023-08-12",
-  },
-];
-
-const OrderHistory = () => {
+const OrderHistory = ({ authUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const filteredOrders = previousOrdersData.filter((order) =>
-    order.productName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const [filterOrder, setFilterOrder] = useState([])
+  useEffect(() => {
+    const filteredOrders = authUser.OrderHistory.map((orderHistory) => {
+      return orderHistory.filter((order) =>
+        order?.productName?.toLowerCase().includes(searchTerm?.toLowerCase())
+      );
+    });
+
+    setFilterOrder(filteredOrders);
+  }, [authUser, searchTerm]);
+  useEffect(() => {
+    apiClient.get(`/user/getUser`)
+      .then(({ data }) => {
+        const filteredOrders = data.data.OrderHistory.map((orderHistory) => {
+          return orderHistory.filter((order) =>
+            order?.productName?.toLowerCase().includes(searchTerm?.toLowerCase())
+          );
+        });
+        setFilterOrder(filteredOrders);
+      })
+  }, []);
+
 
   return (
     <div className="container mt-4">
       <div className="row">
-        <div className="col-lg-12">
-          <div className="form-group">
-            <h6>
-              <label>Search by Product Name</label>
-            </h6>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter product name"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="">
-            <h6 className="pt-3 fw-bold">Previous Orders</h6>
-            <table className="table table-striped table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Image</th>
-                  <th scope="col">Product Name</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Delivery Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredOrders.map((order) => (
-                  <tr key={order.id} scope="row">
-                    <td colspan="1">
-                      <img
-                        src={ladoo}
-                        alt={order.productName}
-                        width={"90px"}
-                        height={"90px"}
-                      />
-                    </td>
-                    <td colspan="1">{order.productName}</td>
-                    <td colspan="1">Rs{order.price.toFixed(2)}</td>
-                    <td colspan="1">{order.deliveryDate}</td>
+        {
+          (filterOrder?.length > 0) ? <div className="col-lg-12">
+            <div className="form-group">
+              <h6>
+                <label>Search by Product Name</label>
+              </h6>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter product name"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="">
+              <h6 className="pt-3 fw-bold">Previous Orders</h6>
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Delivered On</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                </thead>
+                <tbody>
+                  {
+                    filterOrder?.map((orderArray) => {
+                      return orderArray?.map((order) => {
+                        return (
+                          <tr key={order?._id} scope="row">
+                            <td colSpan="1"> {order?.productName}</td>
+                            <td colSpan="1"> {order?._id}</td>
+                            <td colSpan="1">{order?.quantity}</td>
+                            <td colSpan="1">${parseInt(order?.price).toFixed(2)}</td>
+                            <td colSpan="1">{new Date(order?.dateOfOrder).toDateString()}</td>
+                          </tr>
+                        )
+                      })
+                    })
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div> : "Nothing to display! Shop today"
+        }
       </div>
     </div>
   );

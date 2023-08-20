@@ -58,7 +58,9 @@ const userSchema = new Schema({
             pointsRedeemed: Number,
             price: Number,
             paymentMethod: String,
-            dateOfOrder: Date
+            dateOfOrder: Date,
+            productName: String,
+            uuid: String
         }
     ]],
 
@@ -80,7 +82,7 @@ const userSchema = new Schema({
         type: Number,
         default: 0
     },
-    referredTo: [{
+    referredUsers: [{
         userId: {
             type: Schema.Types.ObjectId,
             ref: 'User'
@@ -88,14 +90,13 @@ const userSchema = new Schema({
         pointsEarned: Number,
         dateOfReferral: Date
     }],
-    referredBy: [{
+    referredBy: {
         userId: {
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
-        pointsEarned: Number,
         dateOfReferral: Date
-    }]
+    }
 
 }, { timestamps: true });
 

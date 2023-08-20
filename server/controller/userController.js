@@ -2,11 +2,12 @@ import User from '../model/user.js';
 import Product from '../model/product.js';
 import { signout } from './authController.js';
 import { mintAndEarnPoints, redeemUserPoints, totalUserPoints } from '../web3/utils/helper.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const getUser = async (req, res, next) => {
     try {
         const user = await User.findById(req.auth._id);
-        res.status(200).json({ message: user });
+        res.status(200).json({ message: "fetched successfully", data: user });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -91,17 +92,18 @@ const checkout = async (req, res, next) => {
         let finalAmount = 0;
         const user = await User.findById(req.auth._id);
         let userCurrentPoints = user.points;
+        let productName = '';
+        let orderUUID = uuidv4();
 
         const payHelper = async (item) => {
-            let product = await Product.findById(item.id);
+            let product = await Product.findById(item._id);
             let currentPrice = (product.MRP - product.discount) * item.qnt;
             // console.log(currentPrice, product.points);
             let coinsReq = 0
- 
+
             if (usePoints === true) coinsReq = (product.points / 100) * currentPrice;
- 
-            console.log(coinsReq);
- 
+
+
             let enough = false;
 
             if (userCurrentPoints >= coinsReq) {
@@ -112,11 +114,13 @@ const checkout = async (req, res, next) => {
             else {
                 coinsReq = 0;
             }
+            productName += item.name + " "
 
             finalAmount += currentPrice - coinsReq;
             return (
                 {
-                    id: item.id,
+                    id: item._id,
+                    name: item.name,
                     qnt: item.qnt,
                     pointsEarned: pointsGainWithPurchase(currentPrice - coinsReq),
                     pointsRedeemed: coinsReq,
@@ -140,16 +144,16 @@ const checkout = async (req, res, next) => {
             console.log("blockHaveEnoughPoints", blockHaveEnoughPoints, totalDiscountWithPoints)
             if (blockHaveEnoughPoints < totalDiscountWithPoints && totalDiscountWithPoints > 0) {
                 return res.status(200).json({ message: "You don't have enough points to redeem", data: null, status: "error" });
-            } else if (blockHaveEnoughPoints > totalDiscountWithPoints && totalDiscountWithPoints > 0) {
+            } else if (blockHaveEnoughPoints >= totalDiscountWithPoints && totalDiscountWithPoints > 0) {
                 // if have enough points redeem item
-                let redeemPoints = await redeemUserPoints(walletAddress, totalDiscountWithPoints)
+                let redeemPoints = await redeemUserPoints(walletAddress, totalDiscountWithPoints, orderUUID, productName)
                 if (redeemPoints !== "success") {
                     return res.status(200).json({ message: "oho! error occoured! cannot proceed this time", data: null, status: "error" });
                 }
             }
         }
         // lets mint and send earned points to the users wallet
-        let isMintSuccessfull = await mintAndEarnPoints(walletAddress, FLT)
+        let isMintSuccessfull = await mintAndEarnPoints(walletAddress, FLT, orderUUID, productName)
         console.log("isMintSuccessfull", isMintSuccessfull)
         if (isMintSuccessfull !== "success") {
             return res.status(200).json({ message: "oho! error occoured! cannot proceed this time", data: null, status: "error" });
@@ -160,17 +164,18 @@ const checkout = async (req, res, next) => {
         const order = await Promise.all(items.map(async (product) => {
             return {
                 productId: product.id,
+                productName: product.name,
                 quantity: product.qnt,
                 pointsEarned: product.pointsEarned,
                 pointsRedeemed: product.pointsRedeemed,
                 price: product.price,
                 paymentMethod: product.paymentMethod,
-                dateOfOrder: product.dateOfOrder
+                dateOfOrder: new Date(),
+                uuid: orderUUID
             }
         }));
 
         OrderHistory.push(order);
-        console.log(OrderHistory);
 
         const updatedPoints = userCurrentPoints + FLT;
 
@@ -229,7 +234,7 @@ const afterPaymentUser = async (req, res, next) => {
 
         const order = await Promise.all(items.map(async (product) => {
             return {
-                productId: product.id,
+                productId: product._id,
                 quantity: product.qnt,
                 pointsEarned: product.pointsEarned,
                 pointsRedeemed: product.pointsRedeemed,

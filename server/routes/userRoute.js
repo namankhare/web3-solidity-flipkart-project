@@ -4,7 +4,7 @@ import { getUser, updateUser, deleteUser, viewProducts, getItem, checkout } from
 
 const userRoute = express.Router();
 
-userRoute.get("/getUser", isSignedIn, isSeller, getUser);
+userRoute.get("/getUser", isSignedIn, getUser);
 userRoute.put("/updateUser", isSignedIn, updateUser);
 userRoute.delete("/deleteUser", isSignedIn, isSeller, deleteUser);
 userRoute.get("/viewProducts", viewProducts);
