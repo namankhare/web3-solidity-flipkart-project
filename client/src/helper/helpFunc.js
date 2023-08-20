@@ -32,5 +32,9 @@ function fromNow(date, nowDate = Date.now(), rft = new Intl.RelativeTimeFormat(u
     }
 }
 
+const timestamptoDate = (timestamp) => {
+    return new Date(parseInt(timestamp) * 1000).toDateString();
+}
 
-module.exports = { delete_cookie, fromNow }
+
+export { delete_cookie, fromNow, timestamptoDate }
