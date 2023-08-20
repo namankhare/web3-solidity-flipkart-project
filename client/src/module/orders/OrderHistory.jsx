@@ -67,7 +67,7 @@ const OrderHistory = ({ authUser }) => {
                             <td colSpan="1"> {order?.productName}</td>
                             <td colSpan="1"> {order?._id}</td>
                             <td colSpan="1">{order?.quantity}</td>
-                            <td colSpan="1">${parseInt(order?.price).toFixed(2)}</td>
+                            <td colSpan="1">${parseFloat(order?.price).toFixed(2)}</td>
                             <td colSpan="1">{new Date(order?.dateOfOrder).toDateString()}</td>
                           </tr>
                         )

@@ -28,16 +28,13 @@ Blockchain-based Loyalty and Rewards Program using Fungible Tokens" is a loyalty
 
 ### backend(web3)
 
-- `cd` into `serve\web3` folder.
-- run `yarn` or `npm install` to install the packages.
-- use `yarn run dev` or `npm run dev` to start the project.
+- `cd` into `server\web3` folder.
 - we have solidity smart contracts inside the `web3\contracts` folder and build contracts ready for deployement inside the `web3\build\contracts`
--
 
 ### truffle to deploy contract
 
-- `cd` into `serve\web3` folder.
-- install traffle using `npm install -g truffle` or `yarn global add truffle`.
+- `cd` into `server\web3` folder.
+- install traffle using `npm install -g truffle`.
 - update RPC URL and PORT inside `truffle-config.js` file. `eg: HTTP://127.0.0.1:7545`
 - open console and run `truffle console`.
 - compile contract using `compile --all`.

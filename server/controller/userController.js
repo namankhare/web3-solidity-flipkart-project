@@ -259,7 +259,7 @@ const claimReward = async (req, res, next) => {
         await User.findByIdAndUpdate(
             req.auth._id,
             {
-                points: parseInt(blockHaveEnoughPoints - totalDiscountWithPoints),
+                points: parseFloat(blockHaveEnoughPoints - totalDiscountWithPoints),
                 $push: { ClaimedCoupon }
             },
             { new: true }

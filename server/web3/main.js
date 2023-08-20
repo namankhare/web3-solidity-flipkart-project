@@ -1,5 +1,5 @@
 // Import required modules and packages
-const Web3 = require('web3');
+const { Web3 } = require('web3');
 const dotenv = require('dotenv');
 
 // Initialize dotenv to load environment variables from .env file

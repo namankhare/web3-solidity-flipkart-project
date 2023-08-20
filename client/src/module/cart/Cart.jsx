@@ -33,6 +33,7 @@ const Cart = () => {
     display: isCartActive ? 'block' : 'none',
     zIndex: 999,
   };
+
   useEffect(() => {
     if (walletAddress === '') {
       return;
@@ -44,9 +45,7 @@ const Cart = () => {
       .catch((err) => {
         console.log(err);
       })
-
-
-  }, [walletAddress])
+  }, [walletAddress, isCartActive])
 
   const increaseQuantity = (productId) => {
     const updatedProducts = cart.map((product) =>
@@ -167,7 +166,7 @@ const Cart = () => {
                 <div className="form-check">
                   <input className="form-check-input" type="checkbox" value="" id="usePoints" disabled={(loyaltyCoins > 0) ? false : true} ref={usePointsRef} />
                   <label className="form-check-label" htmlFor="usePoints" >
-                    Use {redeemTotal} out of {loyaltyCoins} Available Points?
+                    Use <span className="text-success fw-bold">{redeemTotal}</span> out of total {loyaltyCoins} Available Points?
                   </label>
                 </div>
                 <button className="btn btn-outline-success" onClick={handleBuyNow}>
