@@ -1,9 +1,10 @@
-import User from '../model/user.js';
-import Product from '../model/product.js';
-import PartnerProduct from '../model/partnerProduct.js';
-import { signout } from './authController.js';
-import { mintAndEarnPoints, redeemUserPoints, totalUserPoints } from '../web3/utils/helper.js';
-import { v4 as uuidv4 } from 'uuid';
+const User = require('../model/user.js');
+const Product = require('../model/product.js');
+const PartnerProduct = require('../model/partnerProduct.js');
+const { signout } = require('./authController.js');
+const { mintAndEarnPoints, redeemUserPoints, totalUserPoints } = require('../web3/utils/helper.js');
+const { v4: uuidv4 } = require('uuid');
+
 
 const getUser = async (req, res, next) => {
     try {
@@ -341,4 +342,4 @@ const afterPaymentUser = async (req, res, next) => {
     }
 }
 
-export { claimReward, getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress };
+module.exports = { claimReward, getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress };

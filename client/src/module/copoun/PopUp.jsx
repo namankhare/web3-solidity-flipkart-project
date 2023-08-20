@@ -114,7 +114,7 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, copouns, setCopouns, type }
           </div>
           <div className="mb-1">
             <label className="form-label">Valid Till</label>
-            <input type="date" className="form-control" defaultValue={new Date(item?.details.valid_until).toISOString().substring(0, 10)} />
+            <input type="date" className="form-control" defaultValue={type !== "add" && new Date(item?.details?.valid_until)?.toISOString().substring(0, 10)} />
           </div>
           <div className="mb-1">
             <label className="form-label">Applicable On</label>

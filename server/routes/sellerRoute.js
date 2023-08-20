@@ -1,7 +1,14 @@
-import express from 'express';
-import { afterPaymentSeller, deleteItem, getAllItems, getItem, launchProduct, updateItem } from '../controller/sellerController.js';
-import { isSeller, isSignedIn } from '../controller/authController.js';
-import { upload } from '../helper/multer.js';
+const express = require('express');
+const {
+    afterPaymentSeller,
+    deleteItem,
+    getAllItems,
+    getItem,
+    launchProduct,
+    updateItem,
+} = require('../controller/sellerController.js');
+const { isSeller, isSignedIn } = require('../controller/authController.js');
+const { upload } = require('../helper/multer.js');
 
 const sellerRouter = express.Router();
 
@@ -12,5 +19,4 @@ sellerRouter.put('/updateItem/:id', isSignedIn, isSeller, upload.single('photo')
 sellerRouter.delete('/deleteItem/:id', isSignedIn, isSeller, deleteItem);
 sellerRouter.post('/afterPayment', afterPaymentSeller);
 
-
-export default sellerRouter;
+module.exports = sellerRouter;

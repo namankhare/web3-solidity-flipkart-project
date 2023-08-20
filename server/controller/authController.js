@@ -1,25 +1,29 @@
-import User from '../model/user.js';
-import bycrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { expressjwt } from 'express-jwt';
-import { mintAndEarnPoints } from '../web3/utils/helper.js';
+const User = require('../model/user.js');
+const bycrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { expressjwt } = require('express-jwt');
+const { mintAndEarnPoints } = require('../web3/utils/helper.js');
 
+// User signup function
 const signup = async (req, res, next) => {
+    // Destructuring properties from the request body
     const { username, email, name, password, address, phone, referredBy, role, walletAddress } = req.body;
 
+    // Validation for required fields
     if (!(username && email && name && password)) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Role validation
     if (role > 2) return res.status(400).json({ message: "Not Allowed" });
 
-
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
         res.status(400).json({ message: "User already exists, login instead" });
-    }
-    else {
+    } else {
+        // Hash the password
         const hashedPassword = await bycrypt.hash(password, 12);
         let data = {
             name: name,
@@ -35,24 +39,27 @@ const signup = async (req, res, next) => {
         const user = new User(data);
 
         try {
+            // Save the user
             let saveSignup = await user.save();
             let { password, ...signupdata } = saveSignup._doc;
             try {
+                // Handle referral logic
                 if (referredBy !== '' && referredBy !== null) {
                     let info = await User.findOneAndUpdate({ username: referredBy },
                         { $push: { referredUsers: signupdata._id } });
                     await mintAndEarnPoints(info.userWallet, process.env.POINTS_ON_REFER, signupdata._id.toString(), `Referral Reward: ${signupdata.name.toString()}`);
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-            res.status(201).json({ data: signupdata, message: "Signup Successfull", staus: "success" });
+            res.status(201).json({ data: signupdata, message: "Signup Successful", status: "success" });
         } catch (error) {
-            return res.status(500).json({ message: error.message, staus: "error" });
+            return res.status(500).json({ message: error.message, status: "error" });
         }
     }
-}
+};
 
+// User signin function
 const signin = async (req, res, next) => {
     const { email } = req.body;
     const plainPassword = req.body.password;
@@ -60,21 +67,18 @@ const signin = async (req, res, next) => {
         if (!(email && plainPassword)) {
             res.status(400).json({ message: "All fields are required" });
         }
-        console.log("df")
 
         const user = await User.findOne({ email });
         const { password, ...existingUser } = user._doc;
 
-
         if (!existingUser) {
             res.status(400).json({ message: "User not found, signup please" });
-        }
-        else {
+        } else {
             const isPasswordCorrect = await bycrypt.compare(plainPassword, password);
             if (!isPasswordCorrect) {
                 res.status(400).json({ message: "Invalid credentials" });
-            }
-            else {
+            } else {
+                // Generate tokens for authentication
                 const token = jwt.sign({ _id: existingUser._id, email: existingUser.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
                 res.cookie("token", token, { expires: new Date(Date.now() + 60 * 1000 * 24), httpOnly: true, sameSite: "None", secure: true })
@@ -83,28 +87,28 @@ const signin = async (req, res, next) => {
 
                 res.status(200).json({
                     user: existingUser,
-                    message: "Sucessfully logged in",
+                    message: "Successfully logged in",
                     token,
                     refreshToken,
                     status: 'success'
                 })
-
-
             }
         }
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
 
-// payload extraction
+// Parse JWT token
 const parseJwt = (token) => {
     try {
         return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
     } catch (error) {
-        return null
+        return null;
     }
-}
+};
+
+// Refresh access token
 const refresh = async (req, res, next) => {
     try {
         const cookies = req.headers.cookie;
@@ -113,8 +117,6 @@ const refresh = async (req, res, next) => {
         }
         const previousAccessToken = req.cookies.token
         const previousRefreshToken = req.body.refreshToken;
-
-        console.log(previousAccessToken, previousRefreshToken);
 
         const parsedAccessToken = parseJwt(previousAccessToken);
         const parsedRefreshToken = parseJwt(previousRefreshToken);
@@ -130,21 +132,21 @@ const refresh = async (req, res, next) => {
         const refreshToken = jwt.sign({ _id: parsedRefreshToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
         res.status(200).json({
-            message: "Sucessfully refreshed access",
+            message: "Successfully refreshed access",
             accessToken,
             refreshToken,
             status: 'success'
         })
     } catch (error) {
         res.status(200).json({
-            message: "Error Occoured",
+            message: "Error Occurred",
             status: 'error'
         })
         console.log(error)
     }
+};
 
-}
-
+// Refresh authentication state
 const refreshAuthState = async (req, res, next) => {
     const accessToken = req.cookies.token || req.body.refreshToken
 
@@ -154,7 +156,7 @@ const refreshAuthState = async (req, res, next) => {
     if (accessToken === "undefined") {
         return res.json({ message: "User not authenticated!", status: false })
     }
-    // console.log(accessToken)
+
     let parsedAccessToken = await parseJwt(accessToken)
     const user = await User.findOne({ _id: parsedAccessToken._id });
     const { password, ...existingUser } = user._doc;
@@ -162,9 +164,10 @@ const refreshAuthState = async (req, res, next) => {
     let token = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME || "1d" });
     res.cookie("token", token, { expire: new Date() + 9999, httpOnly: true, sameSite: "None", secure: true })
     let newRefreshToken = jwt.sign({ _id: parsedAccessToken._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
-    return res.json({ token: token, refreshToken: newRefreshToken, status: "success", user: existingUser })
-}
+    return res.json({ token: token, refreshToken: newRefreshToken, status: "success", user: existingUser });
+};
 
+// ExpressJWT middleware for checking user authentication
 const isSignedIn = expressjwt({
     secret: process.env.JWT_SECRET || "flipkartLoyaltyRewards",
     algorithms: ['HS256'],
@@ -173,41 +176,60 @@ const isSignedIn = expressjwt({
         if (req.cookies.token) {
             const token = req.cookies.token
             return token;
-        }
-        else {
+        } else {
             return null;
         }
     }
-})
+});
 
+// Middleware for checking admin role
 const isAdmin = (req, res, next) => {
     if (req.auth.role < 3) {
         return res.status(403).json({ message: "You are not authorized" });
     }
     next();
-}
+};
+
+// Middleware for checking partner role
 const isPartner = (req, res, next) => {
     if (req.auth.role < 2) {
         return res.status(403).json({ message: "You are not authorized" });
     }
     next();
-}
+};
+
+// Middleware for checking seller role
 const isSeller = (req, res, next) => {
     if (req.auth.role < 1) {
         return res.status(403).json({ message: "You are not authorized" });
     }
     next();
-}
+};
+
+// Middleware for checking user role
 const isUser = (req, res, next) => {
     if (req.auth.role == 1) {
         return res.status(403).json({ message: "You are not authorized" });
     }
     next();
-}
+};
 
+// User signout function
 const signout = (req, res, next) => {
     res.clearCookie("token");
-    res.status(200).json({ data: null, message: "Sucessfully logged out", status: "success" });
-}
+    res.status(200).json({ data: null, message: "Successfully logged out", status: "success" });
+};
 
-export { signin, signup, refresh, isSignedIn, isAdmin, isPartner, isSeller, isUser, signout, refreshAuthState };
+// Export all the necessary functions
+module.exports = {
+    signin,
+    signup,
+    refresh,
+    isSignedIn,
+    isAdmin,
+    isPartner,
+    isSeller,
+    isUser,
+    signout,
+    refreshAuthState
+};

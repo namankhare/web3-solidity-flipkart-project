@@ -1,20 +1,30 @@
-import express from "express";
-import { isSignedIn, refresh, refreshAuthState, signin, signout, signup } from "../controller/authController.js";
+const express = require('express');
+const {
+    isSignedIn,
+    refresh,
+    refreshAuthState,
+    signin,
+    signout,
+    signup
+} = require('../controller/authController.js');
+
+// Create a new express router for the authentication routes
 const authRoute = express.Router();
 
-authRoute.post("/signup", signup);
+// Route for user signup
+authRoute.post('/signup', signup);
 
-authRoute.post("/signin", signin);
+// Route for user signin
+authRoute.post('/signin', signin);
 
-authRoute.post("/refresh", refresh);
+// Route for refreshing access tokens
+authRoute.post('/refresh', refresh);
 
-authRoute.post("/refreshauthstate", refreshAuthState);
+// Route for refreshing authentication state
+authRoute.post('/refreshauthstate', refreshAuthState);
 
-// authRoute.get("/user",isSignedIn,(req,res)=>{
-//     res.send(req.auth)
-// });
+// Route for user signout
+authRoute.get('/signout', isSignedIn, signout);
 
-authRoute.get("/signout", isSignedIn, signout);
-
-
-export default authRoute;
+// Export the authentication router
+module.exports = authRoute;

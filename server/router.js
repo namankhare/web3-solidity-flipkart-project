@@ -1,32 +1,29 @@
-import express from 'express';
+const express = require('express');
 
 const router = express.Router();
 
 // Authentication Router
-import authRoute from './routes/authRoute.js';
+const authRoute = require('./routes/authRoute.js');
 router.use('/auth', authRoute);
 
 // User Router
-import userRoute from './routes/userRoute.js';
+const userRoute = require('./routes/userRoute.js');
 router.use('/user', userRoute);
 
 // Seller Router
-import sellerRoute from './routes/sellerRoute.js';
+const sellerRoute = require('./routes/sellerRoute.js');
 router.use('/seller', sellerRoute);
 
-// partner Router
-import partnerRoute from './routes/partnerRoute.js';
+// Partner Router
+const partnerRoute = require('./routes/partnerRoute.js');
 router.use('/partner', partnerRoute);
 
 // Admin Router
-import adminRoute from './routes/adminRoute.js';
+const adminRoute = require('./routes/adminRoute.js');
 router.use('/admin', adminRoute);
 
-// web3 Router
-import userDetailRoute from './web3/routes/userDetailRoute.js';
+// Web3 Router
+const userDetailRoute = require('./web3/routes/userDetailRoute.js');
 router.use('/web3', userDetailRoute);
 
-
-
-
-export default router;
+module.exports = router;

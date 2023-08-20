@@ -1,7 +1,8 @@
-import PartnerProduct from "../model/partnerProduct.js";
-import User from "../model/user.js";
-import { uniqueSuffix } from "../helper/multer.js"
-import fs from 'fs'
+const PartnerProduct = require("../model/partnerProduct.js");
+const User = require("../model/user.js");
+const { uniqueSuffix } = require("../helper/multer.js");
+const fs = require('fs');
+
 
 
 const getAllPartnerItems = async (req, res, next) => {
@@ -110,5 +111,5 @@ const deleteCard = async (req, res, next) => {
     }
 }
 
-export { getAllPartnerItems, launchCard, updateCard, deleteCard, getPartnerItems };
+module.exports = { getAllPartnerItems, launchCard, updateCard, deleteCard, getPartnerItems };
 

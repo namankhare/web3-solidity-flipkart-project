@@ -3,11 +3,12 @@ import defaultImage from "/vite.svg";
 import "../../../src/style.css";
 import { GlobalContext } from "../../context/GlobalContext";
 import apiClient from "../../helper/apiClient";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { hideMiddleWalletAddress } from "../../helper/helpFunc";
 
 const Navbar = () => {
+  let navigate = useNavigate()
   const { isLoggedIn, authUser, setAuthUser, setIsLoggedIn, isWalletConnected, walletAddress, setWalletAddress, setIsWalletConnected, setIsCartActive, isCartActive } = useContext(GlobalContext);
   const signOut = () => {
     apiClient.get(`/auth/signout`)
@@ -30,6 +31,7 @@ const Navbar = () => {
             OrderHistory: []
           })
           toast.success(data.message)
+          navigate('/')
         }
       })
       .catch((err) => {

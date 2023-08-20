@@ -1,5 +1,5 @@
-import fs from 'fs'
-import multer from 'multer'
+const fs = require('fs');
+const multer = require('multer');
 
 const uniqueSuffix = new Date().getFullYear() + "/" + new Date().getMonth();
 
@@ -19,4 +19,4 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-export { upload, uniqueSuffix }
+module.exports = { upload, uniqueSuffix }

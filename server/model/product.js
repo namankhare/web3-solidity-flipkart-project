@@ -1,40 +1,41 @@
-import mongoose from "mongoose";    
+const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    seller:{
+    seller: {
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    productImage:{
+    productImage: {
         type: String,
         default: "../assets/images/itemNotFound.png"
         // required: true
     },
-    MRP:{
+    MRP: {
         type: Number,
         required: true
     },
-    discount:{
+    discount: {
         type: Number,
         required: true
     },
-    points:{
+    points: {
         type: Number,
         required: true
     },
-    SKU:{
+    SKU: {
         type: Number,
         required: true
     },
-    description:{
+    description: {
         type: String,
         required: true
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
-export default mongoose.model('Product', productSchema);
+module.exports = mongoose.model('Product', productSchema);

@@ -1,7 +1,7 @@
-import Product from "../model/product.js";
-import User from "../model/user.js";
-import { uniqueSuffix } from "../helper/multer.js"
-import fs from 'fs'
+const Product = require("../model/product.js");
+const User = require("../model/user.js");
+const { uniqueSuffix } = require("../helper/multer.js");
+const fs = require('fs');
 
 const launchProduct = async (req, res, next) => {
     const { name, MRP, discount, points, SKU, description } = req.body;
@@ -169,5 +169,11 @@ const afterPaymentSeller = async (req, res, next) => {
     }
 }
 
-export { launchProduct, getAllItems, getItem, updateItem, deleteItem, afterPaymentSeller };
-
+module.exports = {
+    launchProduct,
+    getAllItems,
+    getItem,
+    updateItem,
+    deleteItem,
+    afterPaymentSeller
+};

@@ -1,9 +1,11 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
-import mongoConnection from './config/mongoose.js';
-import cors from 'cors'
-import morgan from "morgan"
+
+const express = require('express');
+const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
+const mongoConnection = require('./config/mongoose.js');
+const cors = require('cors');
+const morgan = require('morgan');
+
 
 const app = express();
 dotenv.config();
@@ -21,7 +23,8 @@ app.use('/img', express.static('assets'));
 
 
 // Route
-import router from './router.js';
+const router = require('./router.js');
+
 app.use('/api', router);
 
 app.get('/', (req, res) => {
