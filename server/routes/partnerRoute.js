@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteCard, getAllPartnerItems, getPartnerItems, launchCard, updateCard} from '../controller/partnerController';
+import { deleteCard, getAllPartnerItems, getPartnerItems, launchCard, updateCard } from '../controller/partnerController';
 import { isPartner, isSignedIn } from '../controller/authController.js';
 import { upload } from '../helper/multer.js';
 
