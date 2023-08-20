@@ -71,14 +71,25 @@ const updateItem = async (req, res, next) => {
 
     try {
 
-        const data = req.body;
-        const { seller, ...others } = data;
+        const { name, MRP, discount, points, SKU, description } = req.body;
+        // const others = req.body;
+        
+        let photoName = uniqueSuffix + "/" + req.body.photo;
+        console.log(photoName);
 
-        const product = await Product.findByIdAndUpdate({ _id: productId }, others, { new: true });
+        const product = await Product.findByIdAndUpdate({ _id: productId }, {
+            name,
+            MRP,
+            discount,
+            points,
+            SKU,
+            description,
+            productImage: photoName
+        }, { new: true });
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
-        res.status(200).json({ others: others, product: product });
+        res.status(200).json({product: product });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
