@@ -35,6 +35,16 @@ const Close = styled.div`
 `;
 
 export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type }) => {
+  let item;
+  if(type !== "add")
+  {
+    item = products.find((p) => {
+    
+      return p._id === type
+    })
+  }
+  // console.log(item);
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -69,16 +79,42 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
     else {
       e.preventDefault();
       try {
-        const oldData = await apiClient.get(`/seller/getItem/${type}`)
-        console.log(oldData.data.product);
-        // const { data } = await apiClient.put(`${import.meta.env.VITE_BACKEND_URL}/seller/updateItem/${type}`)
-        // console.log(data.product);
-        // setProducts([...products, data.product])
+
+        let formRawData = {
+          name: e.target[0].value,
+          MRP: e.target[1].value,
+          discount: e.target[2].value,
+          SKU: e.target[3].value,
+          points: e.target[4].value,
+          description: e.target[5].value,
+          // photo: e.target[6].files[0]
+        }
+        // console.log(e.target[6].files[0]);
+
+        if(e.target[6].files[0] !== undefined)
+        {
+          formRawData.photo = e.target[6].files[0]
+        }
+
+        const formData = new FormData()
+        Object.keys(formRawData).forEach((key) => {
+          formData.append(key, formRawData[key])
+        })
+        
+        const {data}  = await apiClient.put(`/seller/updateItem/${type}`,formData,{
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        let filteredProducts = products.filter((p) => {
+          return p._id !== type
+        })
+        filteredProducts.push(data.product)
+        setProducts(filteredProducts)
+        // console.log(filteredProducts);
 
       } catch (error) {
         console.log(error.response.data);
       }
-      // setVisiblePop(false)
+      setVisiblePop(false)
     }
   }
   return (
@@ -87,31 +123,31 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, products, setProducts, type
         <form onSubmit={addOrUpdate}>
           <div className="mb-1">
             <label className="form-label">Product Name</label>
-            <input type="text" className="form-control" />
+            <input type="text" className="form-control" defaultValue={item?.name}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product MRP</label>
-            <input type="number" className="form-control" />
+            <input type="number" className="form-control"  defaultValue={item?.MRP}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Discount provided</label>
-            <input type="number" className="form-control" />
+            <input type="number" className="form-control"  defaultValue={item?.discount}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product SKU</label>
-            <input type="number" className="form-control" />
+            <input type="number" className="form-control"  defaultValue={item?.SKU}/>
           </div>
           <div className="mb-1">
             <label className="form-label">FLT discount</label>
-            <input type="number" className="form-control" />
+            <input type="number" className="form-control"  defaultValue={item?.points}/>
           </div>
           <div className="mb-1">
             <label className="form-label">Product Description</label>
-            <input type="text" className="form-control" />
+            <input type="text" className="form-control" defaultValue={item?.description} />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Image</label>
-            <input type="file" accept="image/*" className="form-control" />
+            <input type="file" accept="image/*" className="form-control"/>
           </div>
 
           <button type="submit" className="btn btn-primary mt-2">Submit</button>
