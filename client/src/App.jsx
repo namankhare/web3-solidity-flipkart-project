@@ -11,6 +11,7 @@ import { useCallback, useContext, useEffect } from "react";
 import { GlobalContext } from "./context/GlobalContext";
 import axios from "axios";
 import PageNotFound from "./core/page404/PageNotFound";
+import Guideline from "./core/guidelines/guideline";
 
 function App() {
   const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
@@ -19,7 +20,8 @@ function App() {
     let getRefreshToken = localStorage.getItem("refreshtoken");
     if (getRefreshToken) {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/refreshauthstate`, { refreshToken: getRefreshToken },
+        `${import.meta.env.VITE_BACKEND_URL}/auth/refreshauthstate`,
+        { refreshToken: getRefreshToken },
         {
           withCredentials: true,
           headers: {
@@ -37,28 +39,26 @@ function App() {
           role: data.user.role,
           email: data.user.email,
           phone: data.user.phone,
-        })
+        });
       } else {
         setIsLoggedIn(false);
         setAuthUser({
-          userid: '',
-          username: '',
-          name: '',
-          role: '',
-          email: '',
-          phone: 0
-        })
-
+          userid: "",
+          username: "",
+          name: "",
+          role: "",
+          email: "",
+          phone: 0,
+        });
       }
     }
-  }, [setAuthUser, setIsLoggedIn])
+  }, [setAuthUser, setIsLoggedIn]);
 
   useEffect(() => {
     refreshAuthState();
-  }, [refreshAuthState])
+  }, [refreshAuthState]);
   return (
     <>
-
       <Routes>
         <Route path="/" element={<Shop />} />
         <Route path="/login" element={<Login />} />
@@ -68,9 +68,9 @@ function App() {
         <Route path="/orders" element={<Order />} />
         <Route path="/rewards" element={<Rewards />} />
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/guidelines" element={<Guideline />} />
       </Routes>
     </>
   );
-
 }
 export default App;

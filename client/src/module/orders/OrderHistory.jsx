@@ -35,7 +35,7 @@ const OrderHistory = () => {
   return (
     <div className="container mt-4">
       <div className="row">
-        <div className="col-md-4">
+        <div className="col-lg-12">
           <div className="form-group">
             <h6>
               <label>Search by Product Name</label>
@@ -48,36 +48,36 @@ const OrderHistory = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-        </div>
-        <div className="col-md-8">
-          <h6>Previous Orders</h6>
-          <table className="table table-striped table-bordered table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Image</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Delivery Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredOrders.map((order) => (
-                <tr key={order.id} scope="row">
-                  <td colspan="1">
-                    <img
-                      src={ladoo}
-                      alt={order.productName}
-                      width={"90px"}
-                      height={"90px"}
-                    />
-                  </td>
-                  <td colspan="1">{order.productName}</td>
-                  <td colspan="1">Rs{order.price.toFixed(2)}</td>
-                  <td colspan="1">{order.deliveryDate}</td>
+          <div className="">
+            <h6 className="pt-3 fw-bold">Previous Orders</h6>
+            <table className="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Image</th>
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Delivery Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredOrders.map((order) => (
+                  <tr key={order.id} scope="row">
+                    <td colspan="1">
+                      <img
+                        src={ladoo}
+                        alt={order.productName}
+                        width={"90px"}
+                        height={"90px"}
+                      />
+                    </td>
+                    <td colspan="1">{order.productName}</td>
+                    <td colspan="1">Rs{order.price.toFixed(2)}</td>
+                    <td colspan="1">{order.deliveryDate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
