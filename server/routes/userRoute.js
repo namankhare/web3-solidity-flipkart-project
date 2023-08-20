@@ -1,6 +1,6 @@
 import express from "express";
 import { isSeller, isSignedIn } from "../controller/authController.js";
-import { getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress } from "../controller/userController.js";
+import { getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress, claimReward } from "../controller/userController.js";
 
 const userRoute = express.Router();
 
@@ -12,6 +12,7 @@ userRoute.get("/viewProducts", viewProducts);
 userRoute.get('/getItem/:id', getItem);
 // userRoute.post('/checkoutPoints',isSignedIn,isSeller, checkoutWithPoints);
 userRoute.post('/checkout', isSignedIn, checkout);
+userRoute.post('/claimReward', isSignedIn, claimReward);
 // userRoute.post('/afterPayment',isSignedIn,isSeller, afterPaymentUser);
 
 export default userRoute;

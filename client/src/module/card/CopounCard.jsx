@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 import { GlobalContext } from '../../context/GlobalContext'
 import apiClient from '../../helper/apiClient'
 import { PopUp } from '../copoun/PopUp'
-import copoun from "../../assets/img/reward.png"
+import copoun from "../../assets/img/redeemRewardPlaceholder.png"
 
 const CopounCard = ({ item, setCopouns, copouns }) => {
   const { authUser } = useContext(GlobalContext);
@@ -33,9 +33,8 @@ const CopounCard = ({ item, setCopouns, copouns }) => {
           <p className="card-text">Get {item.discount_percentage}% off</p>
           <p className="card-text">{item.description}</p>
           <p className="card-text"><s><b>FLT required: </b>${item.loyalty_coins_required}</s></p>
-          <p className="card-text"><b>Valid Till: </b>{item.details.valid_until}</p>
+          <p className="card-text"><b>Valid Till: </b>{new Date(item.details.valid_until).toDateString()}</p>
           <p className="card-text"><b>Disclaimer: </b>{item.details.applicable_on}</p>
-          <p className="card-text"><b>PROMO code: </b>{item.details.promo_code}</p>
           <div className="d-flex justify-content-between">
             <button className='btn btn-primary' onClick={handleDelete}>Delete</button>
             <button className='btn btn-primary' onClick={handleUpdate}>Update</button>
@@ -43,7 +42,7 @@ const CopounCard = ({ item, setCopouns, copouns }) => {
         </div>
       </div>
       {
-        updatePopup && (<PopUp isVisiblePop={updatePopup} setVisiblePop={setUpdatePopup} products={products} setProducts={setProducts} type={item._id} />)
+        updatePopup && (<PopUp isVisiblePop={updatePopup} setVisiblePop={setUpdatePopup} copouns={copouns} setCopouns={setCopouns} type={item._id} />)
       }
     </>
   )

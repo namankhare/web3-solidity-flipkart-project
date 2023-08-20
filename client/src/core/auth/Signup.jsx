@@ -65,17 +65,17 @@ const Signup = () => {
                 </div>
                 <div className="form-box sign-up-box">
                     <h2 style={{ marginBottom: "10px" }}>Sign up</h2>
-
+                    <div className="check">
+                        {
+                            isSignupWalletConnected
+                                ?
+                                <div className="text-nowrap my-3">Wallet Connected: <span className="p-1 text-white bg-primary rounded-pill">{hideMiddleWalletAddress(signupWalletAddress)}</span></div>
+                                :
+                                <button type="button" className="btn btn-warning" style={{ fontSize: "small" }} onClick={handleConnectWallet}>Connect Wallet</button>
+                        }
+                    </div>
                     <form onSubmit={submitHandler}>
-                        <div className="check">
-                            {
-                                isSignupWalletConnected
-                                    ?
-                                    <div className="text-nowrap my-3">Wallet Connected: <span className="p-1 text-white bg-primary rounded-pill">{hideMiddleWalletAddress(signupWalletAddress)}</span></div>
-                                    :
-                                    <button type="button" className="btn btn-warning" style={{ fontSize: "small" }} onClick={handleConnectWallet}>Connect Wallet</button>
-                            }
-                        </div>
+
                         <div className="field">
                             <i className="fa-solid fa-user"></i>
                             <input type="text" name="name" placeholder="Enter your name" required />

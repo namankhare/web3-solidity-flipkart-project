@@ -64,19 +64,20 @@ const userSchema = new Schema({
             uuid: String
         }
     ]],
-    ClaimedCoupon: [[
+    ClaimedCoupon: [
         {
-            couponID: {
+            rewardsCouponId: {
                 type: Schema.Types.ObjectId,
-                ref: 'Partner'
+                ref: 'PartnerProduct'
             },
+            reward_name: String,
             validUntil: Date,
             applicableOn: String,
             couponCode: String,
             description: String,
             loyaltyCoinsUsed: Number
         }
-    ]],
+    ],
     SoldItemsHistory: [[
         {
             productId: {

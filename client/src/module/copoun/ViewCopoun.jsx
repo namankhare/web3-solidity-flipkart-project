@@ -7,12 +7,12 @@ export const ViewCopoun = ({ copouns, setCopouns }) => {
 
   const getAllProducts = async () => {
     const res = await apiClient.get(`/partner/getItem`);
-    // setCopouns(res.data.data);
+    setCopouns(res.data.data);
     console.log(res.data.data);
   }
   useEffect(() => {
     getAllProducts();
-  }, [setCopouns])
+  }, [])
 
   return (
     <div className="container" >

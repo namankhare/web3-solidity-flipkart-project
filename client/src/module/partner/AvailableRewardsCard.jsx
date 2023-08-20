@@ -1,69 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import apiClient from "../../helper/apiClient";
 import { toast } from "react-hot-toast";
-
-const partner_rewards = [
-    {
-        "reward_name": "OYO Discount",
-        "discount_percentage": 20,
-        "details": {
-            "valid_until": "2023-12-31",
-            "applicable_on": "All room types",
-            "promo_code": "OYO20OFF"
-        },
-        "description": "Get a 20% discount on your OYO hotel bookings worldwide. Use promo code OYO20OFF during checkout.",
-        "loyalty_coins_required": 25
-    },
-    {
-        "reward_name": "Cleartrip Discount",
-        "discount_percentage": 15,
-        "details": {
-            "valid_until": "2023-10-15",
-            "applicable_on": "Domestic flights",
-            "promo_code": "CT15FLY"
-        },
-        "description": "Enjoy 15% off on domestic flight bookings through Cleartrip. Use promo code CT15FLY before making your booking.",
-        "loyalty_coins_required": 25
-
-    },
-    {
-        "reward_name": "Cleartrip Discount",
-        "discount_percentage": 15,
-        "details": {
-            "valid_until": "2023-10-15",
-            "applicable_on": "Domestic flights",
-            "promo_code": "CT15FLY"
-        },
-        "description": "Enjoy 15% off on domestic flight bookings through Cleartrip. Use promo code CT15FLY before making your booking.",
-        "loyalty_coins_required": 25
-
-    },
-    {
-        "reward_name": "Cleartrip Discount",
-        "discount_percentage": 15,
-        "details": {
-            "valid_until": "2023-10-15",
-            "applicable_on": "Domestic flights",
-            "promo_code": "CT15FLY"
-        },
-        "description": "Enjoy 15% off on domestic flight bookings through Cleartrip. Use promo code CT15FLY before making your booking.",
-        "loyalty_coins_required": 25
-
-    },
-    {
-        "reward_name": "Cleartrip Discount",
-        "discount_percentage": 15,
-        "details": {
-            "valid_until": "2023-10-15",
-            "applicable_on": "Domestic flights",
-            "promo_code": "CT15FLY"
-        },
-        "description": "Enjoy 15% off on domestic flight bookings through Cleartrip. Use promo code CT15FLY before making your booking.",
-        "loyalty_coins_required": 25
-    }
-]
-
+import { GlobalContext } from "../../context/GlobalContext";
+import rewardPlaceholderImg from '../../assets/img/redeemRewardPlaceholder.png'
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -101,7 +41,9 @@ const Close = styled.div`
 const AvailableRewardsCard = () => {
     const [isRewardPopupVisible, setIsRewardPopupVisible] = useState(false);
     const [popupModalData, setPopupModalData] = useState([]);
-    const [allRewardItems, setAllRewardItems] = useState([])
+    const [allRewardItems, setAllRewardItems] = useState([]);
+    const { walletAddress } = useContext(GlobalContext);
+
     useEffect(() => {
         apiClient.get(`/partner/getAllPartnerItems`)
             .then(({ data }) => {
@@ -150,7 +92,7 @@ const AvailableRewardsCard = () => {
                             </li>
                         </ul>
 
-                        <button className='btn btn-warning'>Claim Offer</button>
+                        <button className='btn btn-warning' onClick={() => { handleClaimOffer(popupModalData._id) }}>Claim Offer</button>
                         <Close onClick={() => { setIsRewardPopupVisible(false) }}>
                             X
                         </Close>
@@ -158,6 +100,21 @@ const AvailableRewardsCard = () => {
                 </Wrapper>
             </Container>
         )
+    }
+
+    const handleClaimOffer = (rewardId) => {
+        let bodyData = {
+            wallet: walletAddress,
+            rewardId: rewardId
+        }
+        apiClient.post(`/user/claimReward`, bodyData)
+            .then(({ data }) => {
+                toast.success(data.message);
+            })
+            .catch((err) => {
+                toast.error(err.message);
+                console.log(err);
+            })
     }
     return (
         <div className="row gap-2">
@@ -167,7 +124,7 @@ const AvailableRewardsCard = () => {
                     allRewardItems.map((singleRewardCard) => {
                         return (
                             <div key={singleRewardCard._id} className="card" style={{ "width": "17rem" }}>
-                                <img src={'https://placehold.co/400'} className="card-img-top" alt="..." />
+                                <img src={rewardPlaceholderImg} className="card-img-top" alt="..." />
                                 <div className="card-body">
                                     <h5 className="card-title">{singleRewardCard.reward_name}</h5>
                                     <p className="card-text">Get {singleRewardCard.discount_percentage}% off</p>

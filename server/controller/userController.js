@@ -1,5 +1,6 @@
 import User from '../model/user.js';
 import Product from '../model/product.js';
+import PartnerProduct from '../model/partnerProduct.js';
 import { signout } from './authController.js';
 import { mintAndEarnPoints, redeemUserPoints, totalUserPoints } from '../web3/utils/helper.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -206,6 +207,67 @@ const checkout = async (req, res, next) => {
         res.status(500).json({ message: error.message });
     }
 }
+const claimReward = async (req, res, next) => {
+    try {
+        const data = req.body.rewardId;
+        const walletAddress = req.body.wallet;
+        if (!walletAddress) {
+            return res.status(200).json({ message: "connect your wallet again!" });
+        }
+        if (!data) {
+            return res.status(404).json({ message: "No Reward found" });
+        }
+
+        let orderUUID = uuidv4();
+
+        // const user = await User.findById(req.auth._id); 
+        const partnerProduct = await PartnerProduct.findById(data);
+        let productName = partnerProduct.reward_name;
+        let totalDiscountWithPoints = partnerProduct.loyalty_coins_required
+
+        // first check if blockchain have enough points
+        let blockHaveEnoughPoints = await totalUserPoints(walletAddress) || 0
+        console.log("blockHaveEnoughPoints", blockHaveEnoughPoints, totalDiscountWithPoints)
+        if (blockHaveEnoughPoints < totalDiscountWithPoints && totalDiscountWithPoints > 0) {
+            return res.status(200).json({ message: "You don't have enough points to redeem", data: null, status: "error" });
+        } else if (blockHaveEnoughPoints >= totalDiscountWithPoints && totalDiscountWithPoints > 0) {
+            // if have enough points redeem item
+            let redeemPoints = await redeemUserPoints(walletAddress, totalDiscountWithPoints, orderUUID, productName)
+            if (redeemPoints !== "success") {
+                return res.status(200).json({ message: "oho! error occoured! cannot proceed this time", data: null, status: "error" });
+            }
+        }
+
+        // refrund if any issue occoured
+        // let isMintSuccessfull = await mintAndEarnPoints(walletAddress, FLT, orderUUID, productName)
+        // console.log("isMintSuccessfull", isMintSuccessfull)
+        // if (isMintSuccessfull !== "success") {
+        //     return res.status(200).json({ message: "oho! error occoured! cannot proceed this time", data: null, status: "error" });
+        // }
+
+        let ClaimedCoupon = {
+            rewardsCouponId: data,
+            reward_name: partnerProduct.reward_name,
+            validUntil: new Date(partnerProduct.details.valid_until),
+            applicableOn: partnerProduct.details.applicable_on,
+            couponCode: orderUUID,
+            description: partnerProduct.description,
+            loyaltyCoinsUsed: partnerProduct.loyalty_coins_required
+        }
+        await User.findByIdAndUpdate(
+            req.auth._id,
+            {
+                points: parseInt(blockHaveEnoughPoints - totalDiscountWithPoints),
+                $push: { ClaimedCoupon }
+            },
+            { new: true }
+        );
+        res.status(200).json({ message: "Coupon Claimed successfully!", status: 'success' });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 // const checkoutWithoutPoints = async (req, res, next) => {
 //     try {
 //         const data = req.body.products;
@@ -279,4 +341,4 @@ const afterPaymentUser = async (req, res, next) => {
     }
 }
 
-export { getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress };
+export { claimReward, getUser, updateUser, deleteUser, viewProducts, getItem, checkout, addAndGetWalletAddress };

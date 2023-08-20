@@ -37,10 +37,10 @@ const FLPZone = () => {
                 <div className="my-4">
                     <div className="row">
                         <div className="col-8">
-                            <h6 className="">Exciting Rewards for You:</h6>
+                            <h5 className="">Exciting Rewards for You</h5>
                         </div>
                         <div className="col-4">
-                            <button className="btn btn-outline-success m-auto">View Claimed Rewards</button>
+                            <Link className="btn btn-outline-success m-auto" to="/claimedrewards">View Claimed Rewards</Link>
                         </div>
                         <hr className="my-2" />
                     </div>

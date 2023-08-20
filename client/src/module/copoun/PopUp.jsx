@@ -36,10 +36,9 @@ const Close = styled.div`
 
 export const PopUp = ({ isVisiblePop, setVisiblePop, copouns, setCopouns, type }) => {
   let item;
-  if(type !== "add")
-  {
+  if (type !== "add") {
     item = copouns.find((p) => {
-    
+
       return p._id === type
     })
   }
@@ -52,21 +51,16 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, copouns, setCopouns, type }
         reward_name: e.target[0].value,
         discount_percentage: e.target[1].value,
         details: {
-            "valid_until": e.target[2].value,
-            "applicable_on": e.target[3].value,
-            "promo_code": e.target[4].value,
+          "valid_until": e.target[2].value,
+          "applicable_on": e.target[3].value,
         },
-        description: e.target[5].value,
-        loyalty_coins_required: e.target[6].value,
+        description: e.target[4].value,
+        loyalty_coins_required: e.target[5].value,
       }
-      const formData = new FormData()
-      Object.keys(formRawData).forEach((key) => {
-        formData.append(key, formRawData[key])
-      })
 
-      const { data } = await apiClient.post(`${import.meta.env.VITE_BACKEND_URL}/partner/createProducts`, formData)
+      const { data } = await apiClient.post(`${import.meta.env.VITE_BACKEND_URL}/partner/createProducts`, formRawData)
       console.log(data);
-    //   setProducts([...copouns, data.product])
+      setCopouns([...copouns, data.product])
 
 
     } catch (error) {
@@ -81,28 +75,23 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, copouns, setCopouns, type }
       try {
 
         let formRawData = {
-            reward_name: e.target[0].value,
-            discount_percentage: e.target[1].value,
-            details: {
-                "valid_until": e.target[2].value,
-                "applicable_on": e.target[3].value,
-                "promo_code": e.target[4].value,
-            },
-            description: e.target[5].value,
-            loyalty_coins_required: e.target[6].value,
+          reward_name: e.target[0].value,
+          discount_percentage: e.target[1].value,
+          details: {
+            "valid_until": e.target[2].value,
+            "applicable_on": e.target[3].value,
+          },
+          description: e.target[4].value,
+          loyalty_coins_required: e.target[5].value,
         }
-        
-        const formData = new FormData()
-        Object.keys(formRawData).forEach((key) => {
-          formData.append(key, formRawData[key])
-        })
-        
-        const {data}  = await apiClient.put(`/partner/updateItem/${type}`,formData)
-        let filteredProducts = products.filter((p) => {
+
+
+        const { data } = await apiClient.put(`/partner/updateItem/${type}`, formRawData)
+        let filteredProducts = copouns.filter((p) => {
           return p._id !== type
         })
-        // filteredProducts.push(data.product)
-        // setProducts(filteredProducts)
+        filteredProducts.push(data.product)
+        setCopouns(filteredProducts)
         console.log(filteredProducts);
 
       } catch (error) {
@@ -117,23 +106,19 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, copouns, setCopouns, type }
         <form onSubmit={addOrUpdate}>
           <div className="mb-1">
             <label className="form-label">Copoun Name</label>
-            <input type="text" className="form-control" defaultValue={item?.reward_name}/>
+            <input type="text" className="form-control" defaultValue={item?.reward_name} />
           </div>
           <div className="mb-1">
             <label className="form-label">Copoun discount</label>
-            <input type="number" className="form-control"  defaultValue={item?.discount_percentage}/>
+            <input type="number" className="form-control" defaultValue={item?.discount_percentage} />
           </div>
           <div className="mb-1">
             <label className="form-label">Valid Till</label>
-            <input type="text" className="form-control"  defaultValue={item?.valid_until}/>
+            <input type="date" className="form-control" defaultValue={new Date(item?.details.valid_until).toISOString().substring(0, 10)} />
           </div>
           <div className="mb-1">
             <label className="form-label">Applicable On</label>
-            <input type="text" className="form-control"  defaultValue={item?.applicable_on}/>
-          </div>
-          <div className="mb-1">
-            <label className="form-label">Promo Code</label>
-            <input type="text" className="form-control"  defaultValue={item?.promo_code}/>
+            <input type="text" className="form-control" defaultValue={item?.details.applicable_on} />
           </div>
           <div className="mb-1">
             <label className="form-label">Product Description</label>
@@ -143,7 +128,7 @@ export const PopUp = ({ isVisiblePop, setVisiblePop, copouns, setCopouns, type }
             <label className="form-label">FLT needed</label>
             <input type="number" className="form-control" defaultValue={item?.loyalty_coins_required} />
           </div>
-          
+
 
           <button type="submit" className="btn btn-primary mt-2">Submit</button>
         </form>

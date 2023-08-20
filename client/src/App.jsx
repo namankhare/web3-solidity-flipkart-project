@@ -14,6 +14,7 @@ import PageNotFound from "./core/page404/PageNotFound";
 import Guideline from "./core/guidelines/guideline";
 import Partner from "./core/partner/Partner";
 import FLPZone from "./core/partner/FLPZone";
+import ClaimedRewards from "./core/partner/ClaimedRewards";
 
 function App() {
   const { setIsLoggedIn, setAuthUser } = useContext(GlobalContext);
@@ -79,6 +80,7 @@ function App() {
         <Route path="/guidelines" element={<Guideline />} />
         <Route path="/partner" element={<Partner />} />
         <Route path="/flpzone" element={<FLPZone />} />
+        <Route path="/claimedrewards" element={<ClaimedRewards />} />
 
       </Routes>
     </>

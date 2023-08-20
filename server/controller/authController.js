@@ -2,11 +2,12 @@ import User from '../model/user.js';
 import bycrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { expressjwt } from 'express-jwt';
+import { mintAndEarnPoints } from '../web3/utils/helper.js';
 
 const signup = async (req, res, next) => {
     const { username, email, name, password, address, phone, referredBy, role, walletAddress } = req.body;
 
-    if (!(username && email && name && password && role)) {
+    if (!(username && email && name && password)) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -36,11 +37,11 @@ const signup = async (req, res, next) => {
         try {
             let saveSignup = await user.save();
             let { password, ...signupdata } = saveSignup._doc;
-            console.log(signupdata)
             try {
                 if (referredBy !== '' && referredBy !== null) {
-                    await User.findOneAndUpdate({ username: referredBy },
+                    let info = await User.findOneAndUpdate({ username: referredBy },
                         { $push: { referredUsers: signupdata._id } });
+                    await mintAndEarnPoints(info.userWallet, process.env.POINTS_ON_REFER, signupdata._id.toString(), `Referral Reward: ${signupdata.name.toString()}`);
                 }
             } catch (error) {
                 console.log(error)
@@ -59,6 +60,7 @@ const signin = async (req, res, next) => {
         if (!(email && plainPassword)) {
             res.status(400).json({ message: "All fields are required" });
         }
+        console.log("df")
 
         const user = await User.findOne({ email });
         const { password, ...existingUser } = user._doc;

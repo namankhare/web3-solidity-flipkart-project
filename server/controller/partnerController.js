@@ -16,7 +16,7 @@ const getAllPartnerItems = async (req, res, next) => {
 }
 const getPartnerItems = async (req, res, next) => {
     try {
-        const partnerProduct = await PartnerProduct.find({partner: req.auth._id});
+        const partnerProduct = await PartnerProduct.find({ partner: req.auth._id });
         console.log(partnerProduct)
         res.status(200).json({ data: partnerProduct, message: "Fetched successfully", status: "success" });
 
@@ -26,10 +26,11 @@ const getPartnerItems = async (req, res, next) => {
 }
 
 const launchCard = async (req, res, next) => {
-     const { reward_name, discount_percentage, details, description, loyalty_coins_required } = req.body;
+    const { reward_name, discount_percentage, details, description, loyalty_coins_required } = req.body;
     if (!(reward_name && discount_percentage && details && description && loyalty_coins_required)) {
         return res.status(400).json({ message: "All fields are required" });
     }
+    console.log(req.body)
     try {
         const existingProduct = await PartnerProduct.find({ reward_name, partner: req.auth._id });
         if (existingProduct.length > 0) {
@@ -43,9 +44,9 @@ const launchCard = async (req, res, next) => {
             description,
             loyalty_coins_required,
             partner: req.auth._id,
-            
+
         });
-        
+
         res.status(201).json({ message: "Product launched successfully", product: product });
 
     } catch (error) {
@@ -68,14 +69,14 @@ const updateCard = async (req, res, next) => {
     try {
 
         const { reward_name, discount_percentage, details, description, loyalty_coins_required } = req.body;
-        
+
         let updateData = {
             reward_name,
             discount_percentage,
             details,
             description,
             loyalty_coins_required,
-             }
+        }
         const product = await PartnerProduct.findByIdAndUpdate({ _id: itemId }, updateData, { new: true });
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
@@ -109,5 +110,5 @@ const deleteCard = async (req, res, next) => {
     }
 }
 
-export { getAllPartnerItems,launchCard, updateCard, deleteCard, getPartnerItems};
+export { getAllPartnerItems, launchCard, updateCard, deleteCard, getPartnerItems };
 
