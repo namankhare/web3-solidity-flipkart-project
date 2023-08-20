@@ -1,4 +1,4 @@
-const { fungibleTokenContract, loyaltyProgramAddress, loyaltyProgramContract, web3 } = require('../main.js');
+const { fungibleTokenContract, loyaltyProgramAddress, loyaltyProgramContract, Web3 } = require('../main.js');
 
 const ownerAccount = process.env.CONTRACT_ADMIN_WALLET;
 
@@ -59,7 +59,7 @@ const totalUserPoints = async (walletAddress) => {
 const mintAndEarnPoints = async (walletAddress, pointsToEarn, orderId, orderName) => {
     try {
         await fixExpiredToken(walletAddress);
-
+        console.log(ownerAccount, walletAddress)
         // Authorize the LoyaltyProgram contract to mint tokens
         await fungibleTokenContract.methods
             .authorizeLoyaltyProgram(loyaltyProgramAddress)
@@ -127,12 +127,12 @@ const getUserPointsHistory = async (walletAddress) => {
 
 // Function to convert to Wei
 const convertToWei = (amount) => {
-    return web3.utils.toWei(amount, "ether");
+    return Web3.utils.toWei(String(amount), "ether");
 };
 
 // Function to convert from Wei
 const convertFromWei = (amount) => {
-    return web3.utils.fromWei(amount, "ether");
+    return Web3.utils.fromWei(String(amount), "ether");
 };
 
 // Function to convert timestamp to Date

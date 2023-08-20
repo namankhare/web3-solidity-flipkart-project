@@ -83,7 +83,7 @@ contract LoyaltyProgram {
         );
 
         uint256 tokenId = tokenCounter[msg.sender];
-        uint256 expireTimestamp = block.timestamp + 5 minutes; // Set expiration time to 1 minute from now
+        uint256 expireTimestamp = block.timestamp + 365 days; // Set expiration time to 1 minute from now
 
         uint256[] memory fromTokenIds;
         fromTokenIds = _appendToArray(fromTokenIds, tokenId);
