@@ -1,5 +1,5 @@
 import Header from "../module/header/Header";
-import profileImage from "../assets/img/user_pic.png";
+import profileImage from "../assets/img/profile.png";
 import OrderHistory from "../module/orders/OrderHistory";
 import InviteCode from "../module/rewards/InviteCode";
 import RewardHistory from "../module/rewards/RewardHistory";
