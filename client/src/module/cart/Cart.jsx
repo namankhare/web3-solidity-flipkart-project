@@ -162,7 +162,7 @@ const Cart = () => {
               {/* Display the total */}
               <div className="p-3">
                 <strong>Total Price: ${totalPrice.toFixed(2)}</strong>
-                <p className="fst-italic">You will get <span className="fw-bold">{Math.min((Math.floor(totalPrice / 100) * 2).toFixed(0), 50)}</span> Flipkart Loyalty points for this order</p>
+                <p className="fst-italic">You will get <span className="fw-bold">{Math.min((Math.floor(totalPrice / 100) * 2).toFixed(0), 50)}</span> FlipShop Loyalty points for this order</p>
                 <div className="form-check">
                   <input className="form-check-input" type="checkbox" value="" id="usePoints" disabled={(loyaltyCoins > 0) ? false : true} ref={usePointsRef} />
                   <label className="form-check-label" htmlFor="usePoints" >
